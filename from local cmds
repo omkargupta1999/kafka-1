@@ -62,30 +62,54 @@ kafka-console-consumer.bat --bootstrap-server dev-kafka-cluster-kafka-bootstrap-
 
 
 
-output
-C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows> kafka-console-consumer.bat --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 --topic smm-tpoic1 --consumer.config C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\config\client.properties --from-beginning
-The input line is too long.
-The syntax of the command is incorrect.
-C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows>
-C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows>set CFG=C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\config\client.properties
+🟩 STEP-1: Create a batch file (run-consumer.bat)
 
-C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows>kafka-console-consumer.bat --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 --topic smm --consumer.config "%CFG%" --from-beginning
-The input line is too long.
-The syntax of the command is incorrect.
-C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows>kafka-console-consumer.bat --bootstrap-server "dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443" --topic "smm" --consumer.config "C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\config\client.properties" --from-beginning
-The input line is too long.
-The syntax of the command is incorrect.
-C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows>kafka-console-consumer.bat --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 --topic smm --consumer.config C:\KAFKA_~1\KAFKA_~1\config\client.properties --from-beginning
-The input line is too long.
-The syntax of the command is incorrect.
-C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows>set CFG=C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\config\client.properties
+Create this file:
 
-C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows>kafka-console-consumer.bat --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 --topic smm --consumer.config "%CFG%" --from-beginning
-The input line is too long.
-The syntax of the command is incorrect.
-C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows>set CFG=C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\config\client.properties
+C:\kafka_2.13-2.8.1-SMM\run-consumer.bat
 
-C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows>kafka-console-consumer.bat --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 --topic smm --consumer.config "%CFG%" --from-beginning
-The input line is too long.
-The syntax of the command is incorrect.
-C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows>
+
+Put EXACTLY this inside (copy–paste):
+
+@echo off
+set BOOTSTRAP=dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443
+set TOPIC=smm
+set CONFIG=C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\config\client.properties
+
+C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows\kafka-console-consumer.bat --bootstrap-server %BOOTSTRAP% --topic %TOPIC% --consumer.config "%CONFIG%" --from-beginning
+
+
+Save → close.
+
+
+
+🟩 STEP-2: Run it from CMD:
+C:\kafka_2.13-2.8.1-SMM\run-consumer.bat
+
+
+✔ CMD will NOT parse a long line
+✔ The .bat file will
+✔ No syntax errors
+✔ No “input line too long”
+✔ This WILL WORK
+
+🟦 STEP-3: Create producer script (run-producer.bat)
+
+Create:
+
+C:\kafka_2.13-2.8.1-SMM\run-producer.bat
+
+
+Paste:
+
+@echo off
+set BOOTSTRAP=dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443
+set TOPIC=smm
+set CONFIG=C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\config\client.properties
+
+C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows\kafka-console-producer.bat --bootstrap-server %BOOTSTRAP% --topic %TOPIC% --producer.config "%CONFIG%"
+
+
+Run:
+
+C:\kafka_2.13-2.8.1-SMM\run-producer.bat
