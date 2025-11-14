@@ -1,0 +1,13 @@
+kafka-console-consumer.bat ^
+  --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 ^
+  --topic <topic-name> ^
+  --consumer.config C:\kafka\kafka_2.13-2.8.1\config\client.properties ^
+  --from-beginning
+
+
+
+
+kafka-console-producer.bat ^
+  --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 ^
+  --topic <topic-name> ^
+  --producer.config C:\kafka\kafka_2.13-2.8.1\config\client.properties
