@@ -26,3 +26,61 @@ ssl.truststore.location=C:/kafka/kafka_2.13-2.8.1/config/ca.crt
 test from powershell
 Test-NetConnection -ComputerName dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi -Port 443
 
+
+
+
+
+
+
+
+output
+Microsoft Windows [Version 10.0.26100.7171]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\v1021495>cd C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\
+
+C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1>kafka-console-consumer.bat ^
+More?   --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 ^
+More?   --topic smm ^
+More?   --consumer.config C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\configclient.properties ^
+More?   --from-beginning
+'kafka-console-consumer.bat' is not recognized as an internal or external command,
+operable program or batch file.
+
+C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1>cd
+C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1
+
+C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1>cd ..
+
+C:\kafka_2.13-2.8.1-SMM>kafka-console-consumer.bat ^
+More?   --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 ^
+More?   --topic smm ^
+More?   --consumer.config C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\configclient.properties ^
+More?   --from-beginning
+'kafka-console-consumer.bat' is not recognized as an internal or external command,
+operable program or batch file.
+
+C:\kafka_2.13-2.8.1-SMM>cd C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows
+
+C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows>kafka-console-consumer.bat ^
+More?   --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 ^
+More?   --topic smm ^
+More?   --consumer.config C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\configclient.properties ^
+More?   --from-beginning
+The input line is too long.
+The syntax of the command is incorrect.
+C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows>  kafka-console-consumer.bat ^
+More?   --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 ^
+More?   --topic smm ^
+More?   --consumer.config C:/kafka_2.13-2.8.1-SMM/kafka_2.13-2.8.1/configclient.properties ^
+More?   --from-beginning
+The input line is too long.
+The syntax of the command is incorrect.
+C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows>Test-NetConnection -ComputerName dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi -Port 443
+'Test-NetConnection' is not recognized as an internal or external command,
+operable program or batch file.
+
+C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows>
+
+
+
