@@ -117,7 +117,18 @@ C:\kafka_2.13-2.8.1-SMM\run-producer.bat
 
 
 
+C:\kafka\run-direct-consumer.bat
+Paste this:
 
+bat
+Copy code
+@echo off
+java -cp "C:\kafka\libs\*" kafka.tools.ConsoleConsumer ^
+  --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 ^
+  --topic smm ^
+  --consumer.config C:\kafka\config\client.properties ^
+  --from-beginning
+SAVE.
 
 
 
