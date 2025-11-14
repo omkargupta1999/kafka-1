@@ -124,31 +124,31 @@ C:\kafka_2.13-2.8.1-SMM\run-producer.bat
 
 output
 
+C:\kafka_2.13-2.8.1-SMM>notepad run-consumer.bat
+
+C:\kafka_2.13-2.8.1-SMM>notepad run-producer.bat
+
 C:\kafka_2.13-2.8.1-SMM>dir
  Volume in drive C has no label.
  Volume Serial Number is AE95-2EC1
 
  Directory of C:\kafka_2.13-2.8.1-SMM
 
-14-11-2025  12:27    <DIR>          .
-14-11-2025  14:58    <DIR>          kafka_2.13-2.8.1
-               0 File(s)              0 bytes
-               2 Dir(s)  103,586,332,672 bytes free
+14-11-2025  15:07    <DIR>          .
+14-11-2025  15:04    <DIR>          kafka_2.13-2.8.1
+14-11-2025  15:06               364 run-consumer.bat
+14-11-2025  15:07               347 run-producer.bat
+               2 File(s)            711 bytes
+               2 Dir(s)  103,577,989,120 bytes free
 
 C:\kafka_2.13-2.8.1-SMM>run-consumer.bat
-'run-consumer.bat' is not recognized as an internal or external command,
-operable program or batch file.
-
-C:\kafka_2.13-2.8.1-SMM>  kafka-console-consumer.bat --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 --topic smm --consumer.config C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\config\client.properties --from-beginning
-'kafka-console-consumer.bat' is not recognized as an internal or external command,
-operable program or batch file.
-
-C:\kafka_2.13-2.8.1-SMM>C:\kafka_2.13-2.8.1-SMM>run-producer.bat
-'run-producer.bat' is not recognized as an internal or external command,
-operable program or batch file.
-
+The input line is too long.
+The syntax of the command is incorrect.
 C:\kafka_2.13-2.8.1-SMM>run-producer.bat
-'run-producer.bat' is not recognized as an internal or external command,
-operable program or batch file.
-
+The input line is too long.
+The syntax of the command is incorrect.
+C:\kafka_2.13-2.8.1-SMM>.\run-consumer.bat
+The input line is too long.
+The syntax of the command is incorrect.
+C:\kafka_2.13-2.8.1-SMM>
 C:\kafka_2.13-2.8.1-SMM>
