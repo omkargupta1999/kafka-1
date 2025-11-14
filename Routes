@@ -1,0 +1,57 @@
+Routes
+
+Filter
+
+Name
+Search by name...
+/
+
+Name
+Status	
+Location
+
+Service
+Route
+RT
+dev-kafka-cluster-broker-0
+Accepted
+https://dev-kafka-cluster-broker-0-dev-kafka.apps.dev.sbiepay.sbi Copy to clipboard
+Service
+S
+dev-kafka-cluster-broker-0
+
+Route
+RT
+dev-kafka-cluster-broker-1
+Accepted
+https://dev-kafka-cluster-broker-1-dev-kafka.apps.dev.sbiepay.sbi Copy to clipboard
+Service
+S
+dev-kafka-cluster-broker-1
+
+Route
+RT
+dev-kafka-cluster-broker-2
+Accepted
+https://dev-kafka-cluster-broker-2-dev-kafka.apps.dev.sbiepay.sbi Copy to clipboard
+Service
+S
+dev-kafka-cluster-broker-2
+
+Route
+RT
+dev-kafka-cluster-kafka-bootstrap
+Accepted
+https://dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi Copy to clipboard
+Service
+S
+dev-kafka-cluster-kafka-external-bootstrap
+
+Route
+RT
+grafana-route
+Accepted
+https://grafana-route-dev-kafka.apps.dev.sbiepay.sbi Copy to clipboard
+Service
+S
+grafana
