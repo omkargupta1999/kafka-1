@@ -1,29 +1,154 @@
-c:\kafka>  kafka-console-consumer.bat --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 --topic smm --consumer.config C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\config\client.properties --from-beginning
-'kafka-console-consumer.bat' is not recognized as an internal or external command,
-operable program or batch file.
+1. LIST TOPICS (run-list-topics.bat)
 
-c:\kafka>
+Create:
 
-c:\kafka>kafka-console-consumer.bat ^
-More?   --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 ^
-More?   --topic smm ^
-More?   --consumer.config C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\config\client.properties ^
-More?   --from-beginning
-'kafka-console-consumer.bat' is not recognized as an internal or external command,
-operable program or batch file.
+C:\kafka\run-list-topics.bat
 
-c:\kafka>  kafka-console-consumer.bat ^
-More?   --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 ^
-More?   --topic smm ^
-More?   --consumer.config C:\kafka\config\client.properties ^
-More?   --from-beginning
-'kafka-console-consumer.bat' is not recognized as an internal or external command,
-operable program or batch file.
 
-c:\kafka>
-c:\kafka>kafka-console-consumer.bat --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 --topic smm --consumer.config C:\kafka\config\client.properties --from-beginning
-'kafka-console-consumer.bat' is not recognized as an internal or external command,
-operable program or batch file.
+Paste this:
 
-c:\kafka>
+@echo off
+java -cp "C:\kafka\libs\*" kafka.admin.TopicCommand ^
+  --list ^
+  --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 ^
+  --command-config C:\kafka\config\client.properties
 
+
+Run:
+
+C:\kafka\run-list-topics.bat
+
+📌 2. DESCRIBE TOPIC (run-describe-topic.bat)
+
+Create:
+
+C:\kafka\run-describe-topic.bat
+
+
+Paste:
+
+@echo off
+set TOPIC=smm
+java -cp "C:\kafka\libs\*" kafka.admin.TopicCommand ^
+  --describe ^
+  --topic %TOPIC% ^
+  --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 ^
+  --command-config C:\kafka\config\client.properties
+
+
+Run:
+
+C:\kafka\run-describe-topic.bat
+
+
+To change topic, edit:
+
+set TOPIC=your-topic-name
+
+📌 3. CREATE TOPIC (run-create-topic.bat)
+
+Create:
+
+C:\kafka\run-create-topic.bat
+
+
+Paste:
+
+@echo off
+set TOPIC=smm-new-topic
+java -cp "C:\kafka\libs\*" kafka.admin.TopicCommand ^
+  --create ^
+  --topic %TOPIC% ^
+  --partitions 3 ^
+  --replication-factor 3 ^
+  --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 ^
+  --command-config C:\kafka\config\client.properties
+
+
+Run:
+
+C:\kafka\run-create-topic.bat
+
+📌 4. DELETE TOPIC (run-delete-topic.bat)
+
+Create:
+
+C:\kafka\run-delete-topic.bat
+
+
+Paste:
+
+@echo off
+set TOPIC=smm-delete-me
+java -cp "C:\kafka\libs\*" kafka.admin.TopicCommand ^
+  --delete ^
+  --topic %TOPIC% ^
+  --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 ^
+  --command-config C:\kafka\config\client.properties
+
+
+Run:
+
+C:\kafka\run-delete-topic.bat
+
+📌 5. LIST CONSUMER GROUPS (run-list-groups.bat)
+
+Create:
+
+C:\kafka\run-list-groups.bat
+
+
+Paste:
+
+@echo off
+java -cp "C:\kafka\libs\*" kafka.admin.ConsumerGroupCommand ^
+  --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 ^
+  --list ^
+  --command-config C:\kafka\config\client.properties
+
+
+Run:
+
+C:\kafka\run-list-groups.bat
+
+📌 6. DESCRIBE A CONSUMER GROUP (run-describe-group.bat)
+
+Create:
+
+C:\kafka\run-describe-group.bat
+
+
+Paste:
+
+@echo off
+set GROUP=my-consumer-group
+java -cp "C:\kafka\libs\*" kafka.admin.ConsumerGroupCommand ^
+  --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 ^
+  --describe ^
+  --group %GROUP% ^
+  --command-config C:\kafka\config\client.properties
+
+
+Run:
+
+C:\kafka\run-describe-group.bat
+
+📌 7. CHECK OFFSETS (run-check-offsets.bat)
+
+Create:
+
+C:\kafka\run-check-offsets.bat
+
+
+Paste:
+
+@echo off
+set GROUP=my-consumer-group
+java -cp "C:\kafka\libs\*" kafka.admin.ConsumerGroupCommand ^
+  --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 ^
+  --describe ^
+  --group %GROUP% ^
+  --command-config C:\kafka\config\client.properties
+
+
+Same as describe, but useful for offsets + lag.
