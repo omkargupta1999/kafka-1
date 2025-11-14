@@ -1,0 +1,90 @@
+kafka connect from local machine to kafka cluster ocp
+
+-------------------------------kafka-config.yaml-----------------------
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: kafka-config
+  namespace: dev-kafka
+  uid: 2af6bbd4-1861-4049-9735-f48baec1b25b
+  resourceVersion: '496829943'
+  creationTimestamp: '2025-11-11T09:58:35Z'
+  labels:
+    app.kubernetes.io/component: kafka-config
+    app.kubernetes.io/instance: epay-common
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kafka-config
+    environment: dev
+  annotations:
+    argocd.argoproj.io/sync-wave: '7'
+    meta.helm.sh/release-name: epay-common
+    meta.helm.sh/release-namespace: dev-epay-common
+  managedFields:
+    - manager: helm
+      operation: Update
+      apiVersion: v1
+      time: '2025-11-11T09:58:35Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:data':
+          .: {}
+          'f:client.properties': {}
+          'f:kraft-info.md': {}
+        'f:metadata':
+          'f:annotations':
+            .: {}
+            'f:argocd.argoproj.io/sync-wave': {}
+            'f:meta.helm.sh/release-name': {}
+            'f:meta.helm.sh/release-namespace': {}
+          'f:labels':
+            .: {}
+            'f:app.kubernetes.io/component': {}
+            'f:app.kubernetes.io/instance': {}
+            'f:app.kubernetes.io/managed-by': {}
+            'f:app.kubernetes.io/name': {}
+            'f:environment': {}
+data:
+  client.properties: |
+    # Kafka Client Configuration for EPay Pre-Prod (KRaft Mode)
+    bootstrap.servers=dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9092
+
+    # Producer configuration
+    acks=all
+    retries=2147483647
+    max.in.flight.requests.per.connection=5
+    enable.idempotence=true
+    compression.type=snappy
+    batch.size=16384
+    linger.ms=5
+    buffer.memory=33554432
+
+    # Consumer configuration
+    auto.offset.reset=earliest
+    enable.auto.commit=false
+    max.poll.records=500
+    fetch.min.bytes=1
+    fetch.max.wait.ms=500
+
+    # Security configuration (disabled for pre-prod)
+    security.protocol=PLAINTEXT
+  kraft-info.md: |
+    # Kafka KRaft Mode Configuration
+
+    ## Overview
+    This Kafka cluster is running in KRaft mode (Kafka Raft) which eliminates the need for Apache Zookeeper.
+
+    ## Architecture
+    - **Controller Nodes**: 3 replicas handling metadata
+    - **Broker Nodes**: 3 replicas handling client requests
+    - **Storage**: JBOD (Just a Bunch of Disks) with multiple volumes per broker
+
+    ## Benefits of KRaft
+    - Simplified architecture (no Zookeeper dependency)
+    - Better scalability and performance
+    - Faster metadata operations
+    - Reduced operational complexity
+
+    ## Connection Details
+    - Bootstrap servers: dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9092
+    - TLS port: 9093 (if TLS is enabled)
+    - Plain port: 9092
