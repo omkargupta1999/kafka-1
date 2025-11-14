@@ -130,7 +130,17 @@ java -cp "C:\kafka\libs\*" kafka.tools.ConsoleConsumer ^
   --from-beginning
 SAVE.
 
+C:\kafka\run-direct-producer.bat
+Paste this EXACT content:
 
+bat
+Copy code
+@echo off
+java -cp "C:\kafka\libs\*" kafka.tools.ConsoleProducer ^
+  --broker-list dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 ^
+  --topic smm ^
+  --producer.config C:\kafka\config\client.properties
+Save → Close.
 
 
 output
