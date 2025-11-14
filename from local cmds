@@ -30,6 +30,7 @@ Test-NetConnection -ComputerName dev-kafka-cluster-kafka-bootstrap-dev-kafka.app
 
 
 
+kafka-console-consumer.bat --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 --topic smm --consumer.config C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\config\client.properties --from-beginning
 
 
 
