@@ -33,6 +33,34 @@ Test-NetConnection -ComputerName dev-kafka-cluster-kafka-bootstrap-dev-kafka.app
 kafka-console-consumer.bat --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 --topic smm --consumer.config C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\config\client.properties --from-beginning
 
 
+set CFG=C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\config\client.properties
+
+kafka-console-consumer.bat --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 --topic smm --consumer.config "%CFG%" --from-beginning
+
+kafka-console-consumer.bat --bootstrap-server "dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443" --topic "smm" --consumer.config "C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\config\client.properties" --from-beginning
+
+
+C:\KAFKA_~1\KAFKA_~1\config\client.properties
+dir /x C:\
+dir /x C:\kafka_2.13-2.8.1-SMM
+dir /x C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1
+
+kafka-console-consumer.bat --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 --topic smm --consumer.config C:\KAFKA_~1\KAFKA_~1\config\client.properties --from-beginning
+
+
+
+
+set CFG=C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\config\client.properties
+kafka-console-consumer.bat --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 --topic smm --consumer.config "%CFG%" --from-beginning
+
+
+set CFG=C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\config\client.properties
+
+kafka-console-consumer.bat --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 --topic smm --consumer.config "%CFG%" --from-beginning
+
+
+
+
 
 output
 C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows> kafka-console-consumer.bat --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 --topic smm --consumer.config C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\config\client.properties --from-beginning
