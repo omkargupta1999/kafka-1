@@ -1,0 +1,47 @@
+Microsoft Windows [Version 10.0.26100.7171]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\v1021495>cd c:\kafka\
+
+c:\kafka>  kafka-console-consumer.bat --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 --topic smm --consumer.config C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\config\client.properties --from-beginning
+'kafka-console-consumer.bat' is not recognized as an internal or external command,
+operable program or batch file.
+
+c:\kafka>
+
+
+Microsoft Windows [Version 10.0.26100.7171]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\v1021495>cd c:\kafka
+
+c:\kafka>run-consumer.bat
+saadi
+
+
+
+C:\kafka_2.13-2.8.1-SMM>run-consumer.bat
+The input line is too long.
+The syntax of the command is incorrect.
+C:\kafka_2.13-2.8.1-SMM>run-producer.bat
+The input line is too long.
+The syntax of the command is incorrect.
+C:\kafka_2.13-2.8.1-SMM>.\run-consumer.bat
+The input line is too long.
+The syntax of the command is incorrect.
+C:\kafka_2.13-2.8.1-SMM>
+C:\kafka_2.13-2.8.1-SMM>cd c:\kafka
+
+c:\kafka>notepad run-consumer.bat
+
+c:\kafka>run-consumer.bat
+Processed a total of 0 messages
+Terminate batch job (Y/N)? y
+
+c:\kafka>notepad run-producer.bat
+
+c:\kafka>notepad run-producer.bat
+
+c:\kafka>run-producer.bat
+>saadi
+>
