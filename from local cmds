@@ -20,3 +20,9 @@ notepad C:\kafka\kafka_2.13-2.8.1\config\client.properties
 security.protocol=SSL
 ssl.truststore.type=PEM
 ssl.truststore.location=C:/kafka/kafka_2.13-2.8.1/config/ca.crt
+
+
+
+test from powershell
+Test-NetConnection -ComputerName dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi -Port 443
+
