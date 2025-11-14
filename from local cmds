@@ -63,10 +63,29 @@ kafka-console-consumer.bat --bootstrap-server dev-kafka-cluster-kafka-bootstrap-
 
 
 output
-C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows> kafka-console-consumer.bat --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 --topic smm --consumer.config C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\config\client.properties --from-beginning
+C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows> kafka-console-consumer.bat --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 --topic smm-tpoic1 --consumer.config C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\config\client.properties --from-beginning
 The input line is too long.
 The syntax of the command is incorrect.
-C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows> kafka-console-consumer.bat --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 --topic smm-tpoic1 --consumer.config C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\config\client.properties --from-beginning
+C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows>
+C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows>set CFG=C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\config\client.properties
+
+C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows>kafka-console-consumer.bat --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 --topic smm --consumer.config "%CFG%" --from-beginning
+The input line is too long.
+The syntax of the command is incorrect.
+C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows>kafka-console-consumer.bat --bootstrap-server "dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443" --topic "smm" --consumer.config "C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\config\client.properties" --from-beginning
+The input line is too long.
+The syntax of the command is incorrect.
+C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows>kafka-console-consumer.bat --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 --topic smm --consumer.config C:\KAFKA_~1\KAFKA_~1\config\client.properties --from-beginning
+The input line is too long.
+The syntax of the command is incorrect.
+C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows>set CFG=C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\config\client.properties
+
+C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows>kafka-console-consumer.bat --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 --topic smm --consumer.config "%CFG%" --from-beginning
+The input line is too long.
+The syntax of the command is incorrect.
+C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows>set CFG=C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\config\client.properties
+
+C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows>kafka-console-consumer.bat --bootstrap-server dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443 --topic smm --consumer.config "%CFG%" --from-beginning
 The input line is too long.
 The syntax of the command is incorrect.
 C:\kafka_2.13-2.8.1-SMM\kafka_2.13-2.8.1\bin\windows>
