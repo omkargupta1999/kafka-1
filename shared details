@@ -11,3 +11,62 @@ pbUnnCLwMfNm
 
 dev-kafka-cluster-clients-ca-cert Password
 MvgumtgtCJiq
+
+
+
+
+final share
+kafka:
+  bootstrap-servers: dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443
+
+  properties:
+    security.protocol: SSL
+
+  ssl:
+    truststore:
+      location: C:/certs/kafka/ca.crt
+      type: PEM
+
+
+
+
+
+
+
+
+
+
+
+
+FINAL MESSAGE TO SEND DEVELOPERS
+
+Copy this:
+
+Important Update (Kafka SSL Connection)
+
+Please stop using the .p12 certificates (cluster-ca-cert.p12 and clients-ca-cert.p12).
+These CAs do not match the Kafka Route on port 443 and will always cause:
+
+SSLHandshakeException
+PKIX path building failed
+
+
+Kafka external listener on OpenShift uses OpenShift Router CA, not Strimzi CA.
+
+Use the following SSL configuration:
+
+properties:
+  security.protocol: SSL
+ssl:
+  truststore:
+    location: C:/certs/kafka/ca.crt
+    type: PEM
+
+
+Where ca.crt is extracted from:
+
+ConfigMap: kube-root-ca.crt
+Namespace: dev-kafka
+
+
+No keystore and no password are required.
