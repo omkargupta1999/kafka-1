@@ -1,0 +1,13 @@
+
+dev-kafka-cluster-kafka-external-bootstrap-URL
+
+https://dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi:443
+
+
+
+dev-kafka-cluster-cluster-ca-cert password
+pbUnnCLwMfNm
+
+
+dev-kafka-cluster-clients-ca-cert Password
+MvgumtgtCJiq
