@@ -1,0 +1,86 @@
+Strimzi Kafka Commands on OpenShift
+
+1. Check Kafka Cluster Status
+
+oc get kafka -n <namespace>
+oc describe kafka <cluster-name> -n <namespace>
+oc get sts -n <namespace>
+oc get pods -n <namespace>
+
+2. Connect to Kafka Pods
+
+oc get pods -n <namespace> | grep kafka
+oc exec -it <kafka-pod> -n <namespace> -- bash
+oc get pods -n <namespace> | grep connect
+
+3. Topic Operations (KafkaTopic CRD)
+
+Create Topic
+
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: test-topic
+  namespace: <namespace>
+  labels:
+    strimzi.io/cluster: <cluster-name>
+spec:
+  partitions: 3
+  replicas: 3
+
+Commands
+
+oc apply -f topic.yaml
+oc get kafkatopic -n <namespace>
+oc describe kafkatopic <topic-name> -n <namespace>
+oc edit kafkatopic <topic-name> -n <namespace>
+oc delete kafkatopic <topic-name> -n <namespace>
+
+4. Kafka User / ACL Operations
+
+oc get kafkauser -n <namespace>
+oc describe kafkauser <user-name> -n <namespace>
+
+Create User
+
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaUser
+metadata:
+  name: test-user
+  namespace: <namespace>
+  labels:
+    strimzi.io/cluster: <cluster-name>
+spec:
+  authentication:
+    type: scram-sha-512
+
+5. Kafka Console Tools (Inside Pod)
+
+/opt/kafka/bin/kafka-topics.sh --bootstrap-server <bootstrap> --list
+/opt/kafka/bin/kafka-console-producer.sh --bootstrap-server <bootstrap> --topic test
+/opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server <bootstrap> --topic test --from-beginning
+
+6. Kafka Connect Commands
+
+oc get kafkaconnector -n <namespace>
+oc describe kafkaconnector <name> -n <namespace>
+oc delete kafkaconnector <name> -n <namespace>
+
+7. Debugging & Logs
+
+oc logs -f <kafka-pod> -n <namespace>
+oc logs -f <connect-pod> -n <namespace>
+
+8. Broker & Partition Checks
+
+oc exec -it <kafka-pod> -n <namespace> -- cat /var/lib/kafka/data/meta.properties
+
+9. Restart Kafka Pod
+
+oc delete pod <kafka-pod> -n <namespace>
+
+10. Backup CRDs
+
+oc get kafka/<cluster-name> -n <namespace> -o yaml > kafka-backup.yaml
+oc get kafkatopic -n <namespace> -o yaml > kafkatopics-backup.yaml
+oc get kafkauser -n <namespace> -o yaml > kafkausers-backup.yaml
