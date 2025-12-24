@@ -1,0 +1,496 @@
+Getting this error Now its not getting schedule on node:
+
+Error:
+
+Events:
+  Type     Reason            Age    From               Message
+  ----     ------            ----   ----               -------
+  Warning  FailedScheduling  5m39s  default-scheduler  0/18 nodes are available: 12 node(s) didn't match Pod's node affinity/selector, 3 node(s) had untolerated taint {node-role.kubernetes.io/infra: reserved}, 3 node(s) had untolerated taint {node-role.kubernetes.io/master: }. preemption: 0/18 nodes are available: 18 Preemption is not helpful for scheduling.
+  Warning  FailedScheduling  26s    default-scheduler  0/18 nodes are available: 12 node(s) didn't match Pod's node affinity/selector, 3 node(s) had untolerated taint {node-role.kubernetes.io/infra: reserved}, 3 node(s) had untolerated taint {node-role.kubernetes.io/master: }. preemption: 0/18 nodes are available: 18 Preemption is not helpful for scheduling.
+[osuser@bastion ~]$ oc get po -n dev-kafka
+
+
+-----------------------------------------------------------
+
+Below is the KafkaConnect Configuration: 
+
+
+[osuser@bastion ~]$ oc get KafkaConnect -n dev-kafka dev-kafka-connect-mq-test -o yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnect
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "9"
+    meta.helm.sh/release-name: epay-common
+    meta.helm.sh/release-namespace: dev-epay-common
+    strimzi.io/use-connector-resources: "true"
+  creationTimestamp: "2025-12-22T09:17:22Z"
+  generation: 6
+  labels:
+    app.kubernetes.io/component: kafka-connect
+    app.kubernetes.io/instance: epay-common
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: dev-kafka-connect-mq-test
+    environment: dev
+  name: dev-kafka-connect-mq-test
+  namespace: dev-kafka
+  resourceVersion: "547482920"
+  uid: 63cf5ed6-029d-4d41-a66c-1f7b2702a8aa
+spec:
+  authentication:
+    passwordSecret:
+      password: password
+      secretName: epay-user
+    type: scram-sha-512
+    username: epay-user
+  bootstrapServers: dev-kafka-cluster-kafka-external-bootstrap.dev-kafka.svc.cluster.local:9093
+  config:
+    config.storage.replication.factor: -1
+    config.storage.topic: dev-connect-cluster-configs
+    group.id: dev-connect-cluster
+    key.converter: org.apache.kafka.connect.storage.StringConverter
+    offset.flush.interval.ms: 10000
+    offset.flush.timeout.ms: 5000
+    offset.storage.replication.factor: -1
+    offset.storage.topic: dev-connect-cluster-offsets
+    status.storage.replication.factor: -1
+    status.storage.topic: dev-connect-cluster-status
+    value.converter: org.apache.kafka.connect.converters.ByteArrayConverter
+    value.converter.schemas.enable: "false"
+  image: registry.dev.sbiepay.sbi:8443/library/kafka-connect-mq:v1
+  replicas: 3
+  resources:
+    limits:
+      cpu: 4
+      memory: 8Gi
+    requests:
+      cpu: 2
+      memory: 4Gi
+  template:
+    pod:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/worker
+                operator: Exists
+              - key: workload-type
+                operator: In
+                values:
+                - kafka
+      imagePullSecrets:
+      - name: microservices-dev-pull-secret
+      tolerations:
+      - effect: NoSchedule
+        key: workload-type
+        operator: Equal
+        value: kafka
+  tls:
+    trustedCertificates:
+    - pattern: '*.crt'
+      secretName: dev-kafka-cluster-cluster-ca-cert
+  version: 3.9.0
+
+  
+  -------------------------------------------------------------------------------
+I am sharing the node configuration as well where we want to shcedule the pod
+
+
+[osuser@bastion ~]$ oc get no | grep -i dev
+infra1.dev.sbiepay.sbi    Ready    infra                  472d   v1.31.12
+infra2.dev.sbiepay.sbi    Ready    infra                  472d   v1.31.12
+infra3.dev.sbiepay.sbi    Ready    infra                  472d   v1.31.12
+master1.dev.sbiepay.sbi   Ready    control-plane,master   472d   v1.31.12
+master2.dev.sbiepay.sbi   Ready    control-plane,master   472d   v1.31.12
+master3.dev.sbiepay.sbi   Ready    control-plane,master   472d   v1.31.12
+worker1.dev.sbiepay.sbi   Ready    worker                 472d   v1.31.12
+worker2.dev.sbiepay.sbi   Ready    worker                 472d   v1.31.12
+worker3.dev.sbiepay.sbi   Ready    worker                 472d   v1.31.12
+[osuser@bastion ~]$
+[osuser@bastion ~]$ oc describe no worker1.dev.sbiepay.sbi
+Name:               worker1.dev.sbiepay.sbi
+Roles:              worker
+Labels:             SBIEPAY=TEST
+                    beta.kubernetes.io/arch=amd64
+                    beta.kubernetes.io/instance-type=vsphere-vm.cpu-16.mem-64gb.os-unknown
+                    beta.kubernetes.io/os=linux
+                    env=dev
+                    kubernetes.io/arch=amd64
+                    kubernetes.io/hostname=worker1.dev.sbiepay.sbi
+                    kubernetes.io/os=linux
+                    node-role.kubernetes.io/worker=
+                    node.kubernetes.io/instance-type=vsphere-vm.cpu-16.mem-64gb.os-unknown
+                    node.openshift.io/os_id=rhcos
+                    type=worker
+                    worker-node=sbi
+Annotations:        alpha.kubernetes.io/provided-node-ip: 10.177.142.141
+                    csi.volume.kubernetes.io/nodeid:
+                      {"csi.oneagent.dynatrace.com":"worker1.dev.sbiepay.sbi","csi.trident.netapp.io":"worker1.dev.sbiepay.sbi","csi.vsphere.vmware.com":"42013a...
+                    k8s.ovn.org/host-cidrs: ["10.177.142.141/21"]
+                    k8s.ovn.org/l3-gateway-config:
+                      {"default":{"mode":"shared","bridge-id":"br-ex","interface-id":"br-ex_worker1.dev.sbiepay.sbi","mac-address":"00:50:56:81:2b:12","ip-addre...
+                    k8s.ovn.org/network-ids: {"default":"0"}
+                    k8s.ovn.org/node-chassis-id: 7f6cf085-b967-4c0c-9bfd-d4d51a4be1cd
+                    k8s.ovn.org/node-encap-ips: ["10.177.142.141"]
+                    k8s.ovn.org/node-gateway-router-lrp-ifaddr: {"ipv4":"100.64.0.6/16"}
+                    k8s.ovn.org/node-gateway-router-lrp-ifaddrs: {"default":{"ipv4":"100.64.0.6/16"}}
+                    k8s.ovn.org/node-id: 6
+                    k8s.ovn.org/node-masquerade-subnet: {"ipv4":"169.254.169.0/29","ipv6":"fd69::/125"}
+                    k8s.ovn.org/node-mgmt-port-mac-address: 32:de:82:c7:fb:9a
+                    k8s.ovn.org/node-mgmt-port-mac-addresses: {"default":"32:de:82:c7:fb:9a"}
+                    k8s.ovn.org/node-primary-ifaddr: {"ipv4":"10.177.142.141/21"}
+                    k8s.ovn.org/node-subnets: {"default":["172.16.8.0/23"]}
+                    k8s.ovn.org/node-transit-switch-port-ifaddr: {"ipv4":"100.88.0.6/16"}
+                    k8s.ovn.org/remote-zone-migrated: worker1.dev.sbiepay.sbi
+                    k8s.ovn.org/zone-name: worker1.dev.sbiepay.sbi
+                    machineconfiguration.openshift.io/controlPlaneTopology: HighlyAvailable
+                    machineconfiguration.openshift.io/currentConfig: rendered-worker-069f715f2a6de7bdb63fedc13328e47e
+                    machineconfiguration.openshift.io/desiredConfig: rendered-worker-069f715f2a6de7bdb63fedc13328e47e
+                    machineconfiguration.openshift.io/desiredDrain: uncordon-rendered-worker-069f715f2a6de7bdb63fedc13328e47e
+                    machineconfiguration.openshift.io/lastAppliedDrain: uncordon-rendered-worker-069f715f2a6de7bdb63fedc13328e47e
+                    machineconfiguration.openshift.io/lastObservedServerCAAnnotation: false
+                    machineconfiguration.openshift.io/lastSyncedControllerConfigResourceVersion: 543243091
+                    machineconfiguration.openshift.io/post-config-action:
+                    machineconfiguration.openshift.io/reason:
+                    machineconfiguration.openshift.io/state: Done
+                    volumes.kubernetes.io/controller-managed-attach-detach: true
+CreationTimestamp:  Sat, 07 Sep 2024 08:03:48 +0000
+Taints:             <none>
+Unschedulable:      false
+Lease:
+  HolderIdentity:  worker1.dev.sbiepay.sbi
+  AcquireTime:     <unset>
+  RenewTime:       Wed, 24 Dec 2025 06:03:04 +0000
+Conditions:
+  Type             Status  LastHeartbeatTime                 LastTransitionTime                Reason                       Message
+  ----             ------  -----------------                 ------------------                ------                       -------
+  MemoryPressure   False   Wed, 24 Dec 2025 06:02:58 +0000   Fri, 21 Nov 2025 05:16:40 +0000   KubeletHasSufficientMemory   kubelet has sufficient memory available
+  DiskPressure     False   Wed, 24 Dec 2025 06:02:58 +0000   Fri, 21 Nov 2025 05:16:40 +0000   KubeletHasNoDiskPressure     kubelet has no disk pressure
+  PIDPressure      False   Wed, 24 Dec 2025 06:02:58 +0000   Fri, 21 Nov 2025 05:16:40 +0000   KubeletHasSufficientPID      kubelet has sufficient PID available
+  Ready            True    Wed, 24 Dec 2025 06:02:58 +0000   Fri, 21 Nov 2025 05:16:56 +0000   KubeletReady                 kubelet is posting ready status
+Addresses:
+  InternalIP:  10.177.142.141
+  ExternalIP:  10.177.142.141
+  Hostname:    worker1.dev.sbiepay.sbi
+Capacity:
+  cpu:                16
+  ephemeral-storage:  261553132Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             65815484Ki
+  pods:               250
+Allocatable:
+  cpu:                15500m
+  ephemeral-storage:  239973624229
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             64664508Ki
+  pods:               250
+System Info:
+  Machine ID:                             bc90ceb577d5457baca959619747b5f8
+  System UUID:                            023a0142-1405-d3b0-0b14-c3de7a244751
+  Boot ID:                                5f5992ae-ab57-4fd3-9be2-8b86fac58e8f
+  Kernel Version:                         5.14.0-427.87.1.el9_4.x86_64
+  OS Image:                               Red Hat Enterprise Linux CoreOS 418.94.202509100653-0
+  Operating System:                       linux
+  Architecture:                           amd64
+  Container Runtime Version:              cri-o://1.31.12-3.rhaos4.18.gitdc59c78.el9
+  Kubelet Version:                        v1.31.12
+  Kube-Proxy Version:                     v1.31.12
+ProviderID:                               vsphere://42013a02-0514-b0d3-0b14-c3de7a244751
+Non-terminated Pods:                      (33 in total)
+  Namespace                               Name                                                      CPU Requests  CPU Limits  Memory Requests  Memory Limits  Age
+  ---------                               ----                                                      ------------  ----------  ---------------  -------------  ---
+  dev-admin                               admin-adminservice-7697bc5c77-zw59v                       100m (0%)     2 (12%)     128Mi (0%)       1Gi (1%)       19h
+  dev-admin                               admin-portal-adminportalservice-ccf79d997-8w5pr           100m (0%)     2 (12%)     128Mi (0%)       1Gi (1%)       44h
+  dev-cache                               hazelcast-0                                               100m (0%)     2 (12%)     128Mi (0%)       1Gi (1%)       33d
+  dev-cache                               hazelcast-2                                               100m (0%)     2 (12%)     128Mi (0%)       1Gi (1%)       33d
+  dev-cache                               hazelcast-mancenter-0                                     100m (0%)     2 (12%)     128Mi (0%)       1Gi (1%)       33d
+  dev-integration                         integration-integrationservice-bb6db8995-s26s2            2100m (13%)   6 (38%)     378Mi (0%)       1524Mi (2%)    26d
+  dev-kafka                               dev-kafka-cluster-broker-2                                0 (0%)        0 (0%)      0 (0%)           0 (0%)         16h
+  dev-kafka                               dev-kafka-cluster-cruise-control-65f9b96bd6-dp54g         1 (6%)        2 (12%)     2Gi (3%)         4Gi (6%)       32d
+  dev-kafka                               dev-kafka-cluster-entity-operator-656dcf5cdd-q9hbr        0 (0%)        0 (0%)      0 (0%)           0 (0%)         36m
+  dev-merchant                            merchant-merchantservice-6c86b4b5fb-6hctz                 100m (0%)     2 (12%)     128Mi (0%)       1Gi (1%)       47h
+  dev-sbiepay                             javasimulator-javautilityapisimulator-869c8dc78f-sgsl2    100m (0%)     2 (12%)     128Mi (0%)       1Gi (1%)       33d
+  dynatrace                               dynatrace-oneagent-csi-driver-55ptq                       390m (2%)     90m (0%)    260Mi (0%)       160Mi (0%)     32d
+  dynatrace                               epayuat-oneagent-xhtx5                                    100m (0%)     0 (0%)      0 (0%)           0 (0%)         32d
+  istio-cni                               istio-cni-node-m42j8                                      100m (0%)     0 (0%)      100Mi (0%)       0 (0%)         3d19h
+  openshift-cluster-csi-drivers           vmware-vsphere-csi-driver-node-78hlc                      30m (0%)      0 (0%)      150Mi (0%)       0 (0%)         33d
+  openshift-cluster-node-tuning-operator  tuned-cgxzf                                               10m (0%)      0 (0%)      50Mi (0%)        0 (0%)         33d
+  openshift-dns                           dns-default-jkpnx                                         60m (0%)      0 (0%)      110Mi (0%)       0 (0%)         33d
+  openshift-dns                           node-resolver-p64qx                                       5m (0%)       0 (0%)      21Mi (0%)        0 (0%)         33d
+  openshift-image-registry                node-ca-tb5xj                                             10m (0%)      0 (0%)      10Mi (0%)        0 (0%)         33d
+  openshift-ingress-canary                ingress-canary-qzhqs                                      10m (0%)      0 (0%)      20Mi (0%)        0 (0%)         33d
+  openshift-logging                       collector-ggvls                                           500m (3%)     6 (38%)     64Mi (0%)        2Gi (3%)       3d23h
+  openshift-machine-config-operator       kube-rbac-proxy-crio-worker1.dev.sbiepay.sbi              20m (0%)      0 (0%)      50Mi (0%)        0 (0%)         33d
+  openshift-machine-config-operator       machine-config-daemon-r9ldb                               40m (0%)      0 (0%)      100Mi (0%)       0 (0%)         33d
+  openshift-monitoring                    node-exporter-zzq9h                                       9m (0%)       0 (0%)      47Mi (0%)        0 (0%)         33d
+  openshift-multus                        multus-additional-cni-plugins-nhb7q                       10m (0%)      0 (0%)      10Mi (0%)        0 (0%)         33d
+  openshift-multus                        multus-pvhjv                                              10m (0%)      0 (0%)      65Mi (0%)        0 (0%)         33d
+  openshift-multus                        network-metrics-daemon-8c5t5                              20m (0%)      0 (0%)      120Mi (0%)       0 (0%)         33d
+  openshift-network-diagnostics           network-check-target-j8s7k                                10m (0%)      0 (0%)      15Mi (0%)        0 (0%)         33d
+  openshift-network-operator              iptables-alerter-jbzdt                                    10m (0%)      10m (0%)    65Mi (0%)        0 (0%)         33d
+  openshift-ovn-kubernetes                ovnkube-node-pnhqr                                        80m (0%)      0 (0%)      1630Mi (2%)      0 (0%)         33d
+  sit-istio-system                        sit-istio-gateway-786776cfff-n44ll                        100m (0%)     2 (12%)     128Mi (0%)       1Gi (1%)       33d
+  telnet                                  telnet-server-6ddc69dbdf-5spxr                            100m (0%)     2 (12%)     128Mi (0%)       1Gi (1%)       33d
+  trident                                 trident-node-linux-rv2gf                                  0 (0%)        0 (0%)      0 (0%)           0 (0%)         32d
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests      Limits
+  --------           --------      ------
+  cpu                5424m (34%)   32100m (207%)
+  memory             6465Mi (10%)  17044Mi (26%)
+  ephemeral-storage  0 (0%)        0 (0%)
+  hugepages-1Gi      0 (0%)        0 (0%)
+  hugepages-2Mi      0 (0%)        0 (0%)
+Events:              <none>
+[osuser@bastion ~]$
+Getting this error Now its not getting schedule on node:
+
+Error:
+
+Events:
+  Type     Reason            Age    From               Message
+  ----     ------            ----   ----               -------
+  Warning  FailedScheduling  5m39s  default-scheduler  0/18 nodes are available: 12 node(s) didn't match Pod's node affinity/selector, 3 node(s) had untolerated taint {node-role.kubernetes.io/infra: reserved}, 3 node(s) had untolerated taint {node-role.kubernetes.io/master: }. preemption: 0/18 nodes are available: 18 Preemption is not helpful for scheduling.
+  Warning  FailedScheduling  26s    default-scheduler  0/18 nodes are available: 12 node(s) didn't match Pod's node affinity/selector, 3 node(s) had untolerated taint {node-role.kubernetes.io/infra: reserved}, 3 node(s) had untolerated taint {node-role.kubernetes.io/master: }. preemption: 0/18 nodes are available: 18 Preemption is not helpful for scheduling.
+[osuser@bastion ~]$ oc get po -n dev-kafka
+
+
+-----------------------------------------------------------
+
+Below is the KafkaConnect Configuration: 
+
+
+[osuser@bastion ~]$ oc get KafkaConnect -n dev-kafka dev-kafka-connect-mq-test -o yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnect
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "9"
+    meta.helm.sh/release-name: epay-common
+    meta.helm.sh/release-namespace: dev-epay-common
+    strimzi.io/use-connector-resources: "true"
+  creationTimestamp: "2025-12-22T09:17:22Z"
+  generation: 6
+  labels:
+    app.kubernetes.io/component: kafka-connect
+    app.kubernetes.io/instance: epay-common
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: dev-kafka-connect-mq-test
+    environment: dev
+  name: dev-kafka-connect-mq-test
+  namespace: dev-kafka
+  resourceVersion: "547482920"
+  uid: 63cf5ed6-029d-4d41-a66c-1f7b2702a8aa
+spec:
+  authentication:
+    passwordSecret:
+      password: password
+      secretName: epay-user
+    type: scram-sha-512
+    username: epay-user
+  bootstrapServers: dev-kafka-cluster-kafka-external-bootstrap.dev-kafka.svc.cluster.local:9093
+  config:
+    config.storage.replication.factor: -1
+    config.storage.topic: dev-connect-cluster-configs
+    group.id: dev-connect-cluster
+    key.converter: org.apache.kafka.connect.storage.StringConverter
+    offset.flush.interval.ms: 10000
+    offset.flush.timeout.ms: 5000
+    offset.storage.replication.factor: -1
+    offset.storage.topic: dev-connect-cluster-offsets
+    status.storage.replication.factor: -1
+    status.storage.topic: dev-connect-cluster-status
+    value.converter: org.apache.kafka.connect.converters.ByteArrayConverter
+    value.converter.schemas.enable: "false"
+  image: registry.dev.sbiepay.sbi:8443/library/kafka-connect-mq:v1
+  replicas: 3
+  resources:
+    limits:
+      cpu: 4
+      memory: 8Gi
+    requests:
+      cpu: 2
+      memory: 4Gi
+  template:
+    pod:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/worker
+                operator: Exists
+              - key: workload-type
+                operator: In
+                values:
+                - kafka
+      imagePullSecrets:
+      - name: microservices-dev-pull-secret
+      tolerations:
+      - effect: NoSchedule
+        key: workload-type
+        operator: Equal
+        value: kafka
+  tls:
+    trustedCertificates:
+    - pattern: '*.crt'
+      secretName: dev-kafka-cluster-cluster-ca-cert
+  version: 3.9.0
+
+  
+  -------------------------------------------------------------------------------
+I am sharing the node configuration as well where we want to shcedule the pod
+
+
+[osuser@bastion ~]$ oc get no | grep -i dev
+infra1.dev.sbiepay.sbi    Ready    infra                  472d   v1.31.12
+infra2.dev.sbiepay.sbi    Ready    infra                  472d   v1.31.12
+infra3.dev.sbiepay.sbi    Ready    infra                  472d   v1.31.12
+master1.dev.sbiepay.sbi   Ready    control-plane,master   472d   v1.31.12
+master2.dev.sbiepay.sbi   Ready    control-plane,master   472d   v1.31.12
+master3.dev.sbiepay.sbi   Ready    control-plane,master   472d   v1.31.12
+worker1.dev.sbiepay.sbi   Ready    worker                 472d   v1.31.12
+worker2.dev.sbiepay.sbi   Ready    worker                 472d   v1.31.12
+worker3.dev.sbiepay.sbi   Ready    worker                 472d   v1.31.12
+[osuser@bastion ~]$
+[osuser@bastion ~]$ oc describe no worker1.dev.sbiepay.sbi
+Name:               worker1.dev.sbiepay.sbi
+Roles:              worker
+Labels:             SBIEPAY=TEST
+                    beta.kubernetes.io/arch=amd64
+                    beta.kubernetes.io/instance-type=vsphere-vm.cpu-16.mem-64gb.os-unknown
+                    beta.kubernetes.io/os=linux
+                    env=dev
+                    kubernetes.io/arch=amd64
+                    kubernetes.io/hostname=worker1.dev.sbiepay.sbi
+                    kubernetes.io/os=linux
+                    node-role.kubernetes.io/worker=
+                    node.kubernetes.io/instance-type=vsphere-vm.cpu-16.mem-64gb.os-unknown
+                    node.openshift.io/os_id=rhcos
+                    type=worker
+                    worker-node=sbi
+Annotations:        alpha.kubernetes.io/provided-node-ip: 10.177.142.141
+                    csi.volume.kubernetes.io/nodeid:
+                      {"csi.oneagent.dynatrace.com":"worker1.dev.sbiepay.sbi","csi.trident.netapp.io":"worker1.dev.sbiepay.sbi","csi.vsphere.vmware.com":"42013a...
+                    k8s.ovn.org/host-cidrs: ["10.177.142.141/21"]
+                    k8s.ovn.org/l3-gateway-config:
+                      {"default":{"mode":"shared","bridge-id":"br-ex","interface-id":"br-ex_worker1.dev.sbiepay.sbi","mac-address":"00:50:56:81:2b:12","ip-addre...
+                    k8s.ovn.org/network-ids: {"default":"0"}
+                    k8s.ovn.org/node-chassis-id: 7f6cf085-b967-4c0c-9bfd-d4d51a4be1cd
+                    k8s.ovn.org/node-encap-ips: ["10.177.142.141"]
+                    k8s.ovn.org/node-gateway-router-lrp-ifaddr: {"ipv4":"100.64.0.6/16"}
+                    k8s.ovn.org/node-gateway-router-lrp-ifaddrs: {"default":{"ipv4":"100.64.0.6/16"}}
+                    k8s.ovn.org/node-id: 6
+                    k8s.ovn.org/node-masquerade-subnet: {"ipv4":"169.254.169.0/29","ipv6":"fd69::/125"}
+                    k8s.ovn.org/node-mgmt-port-mac-address: 32:de:82:c7:fb:9a
+                    k8s.ovn.org/node-mgmt-port-mac-addresses: {"default":"32:de:82:c7:fb:9a"}
+                    k8s.ovn.org/node-primary-ifaddr: {"ipv4":"10.177.142.141/21"}
+                    k8s.ovn.org/node-subnets: {"default":["172.16.8.0/23"]}
+                    k8s.ovn.org/node-transit-switch-port-ifaddr: {"ipv4":"100.88.0.6/16"}
+                    k8s.ovn.org/remote-zone-migrated: worker1.dev.sbiepay.sbi
+                    k8s.ovn.org/zone-name: worker1.dev.sbiepay.sbi
+                    machineconfiguration.openshift.io/controlPlaneTopology: HighlyAvailable
+                    machineconfiguration.openshift.io/currentConfig: rendered-worker-069f715f2a6de7bdb63fedc13328e47e
+                    machineconfiguration.openshift.io/desiredConfig: rendered-worker-069f715f2a6de7bdb63fedc13328e47e
+                    machineconfiguration.openshift.io/desiredDrain: uncordon-rendered-worker-069f715f2a6de7bdb63fedc13328e47e
+                    machineconfiguration.openshift.io/lastAppliedDrain: uncordon-rendered-worker-069f715f2a6de7bdb63fedc13328e47e
+                    machineconfiguration.openshift.io/lastObservedServerCAAnnotation: false
+                    machineconfiguration.openshift.io/lastSyncedControllerConfigResourceVersion: 543243091
+                    machineconfiguration.openshift.io/post-config-action:
+                    machineconfiguration.openshift.io/reason:
+                    machineconfiguration.openshift.io/state: Done
+                    volumes.kubernetes.io/controller-managed-attach-detach: true
+CreationTimestamp:  Sat, 07 Sep 2024 08:03:48 +0000
+Taints:             <none>
+Unschedulable:      false
+Lease:
+  HolderIdentity:  worker1.dev.sbiepay.sbi
+  AcquireTime:     <unset>
+  RenewTime:       Wed, 24 Dec 2025 06:03:04 +0000
+Conditions:
+  Type             Status  LastHeartbeatTime                 LastTransitionTime                Reason                       Message
+  ----             ------  -----------------                 ------------------                ------                       -------
+  MemoryPressure   False   Wed, 24 Dec 2025 06:02:58 +0000   Fri, 21 Nov 2025 05:16:40 +0000   KubeletHasSufficientMemory   kubelet has sufficient memory available
+  DiskPressure     False   Wed, 24 Dec 2025 06:02:58 +0000   Fri, 21 Nov 2025 05:16:40 +0000   KubeletHasNoDiskPressure     kubelet has no disk pressure
+  PIDPressure      False   Wed, 24 Dec 2025 06:02:58 +0000   Fri, 21 Nov 2025 05:16:40 +0000   KubeletHasSufficientPID      kubelet has sufficient PID available
+  Ready            True    Wed, 24 Dec 2025 06:02:58 +0000   Fri, 21 Nov 2025 05:16:56 +0000   KubeletReady                 kubelet is posting ready status
+Addresses:
+  InternalIP:  10.177.142.141
+  ExternalIP:  10.177.142.141
+  Hostname:    worker1.dev.sbiepay.sbi
+Capacity:
+  cpu:                16
+  ephemeral-storage:  261553132Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             65815484Ki
+  pods:               250
+Allocatable:
+  cpu:                15500m
+  ephemeral-storage:  239973624229
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             64664508Ki
+  pods:               250
+System Info:
+  Machine ID:                             bc90ceb577d5457baca959619747b5f8
+  System UUID:                            023a0142-1405-d3b0-0b14-c3de7a244751
+  Boot ID:                                5f5992ae-ab57-4fd3-9be2-8b86fac58e8f
+  Kernel Version:                         5.14.0-427.87.1.el9_4.x86_64
+  OS Image:                               Red Hat Enterprise Linux CoreOS 418.94.202509100653-0
+  Operating System:                       linux
+  Architecture:                           amd64
+  Container Runtime Version:              cri-o://1.31.12-3.rhaos4.18.gitdc59c78.el9
+  Kubelet Version:                        v1.31.12
+  Kube-Proxy Version:                     v1.31.12
+ProviderID:                               vsphere://42013a02-0514-b0d3-0b14-c3de7a244751
+Non-terminated Pods:                      (33 in total)
+  Namespace                               Name                                                      CPU Requests  CPU Limits  Memory Requests  Memory Limits  Age
+  ---------                               ----                                                      ------------  ----------  ---------------  -------------  ---
+  dev-admin                               admin-adminservice-7697bc5c77-zw59v                       100m (0%)     2 (12%)     128Mi (0%)       1Gi (1%)       19h
+  dev-admin                               admin-portal-adminportalservice-ccf79d997-8w5pr           100m (0%)     2 (12%)     128Mi (0%)       1Gi (1%)       44h
+  dev-cache                               hazelcast-0                                               100m (0%)     2 (12%)     128Mi (0%)       1Gi (1%)       33d
+  dev-cache                               hazelcast-2                                               100m (0%)     2 (12%)     128Mi (0%)       1Gi (1%)       33d
+  dev-cache                               hazelcast-mancenter-0                                     100m (0%)     2 (12%)     128Mi (0%)       1Gi (1%)       33d
+  dev-integration                         integration-integrationservice-bb6db8995-s26s2            2100m (13%)   6 (38%)     378Mi (0%)       1524Mi (2%)    26d
+  dev-kafka                               dev-kafka-cluster-broker-2                                0 (0%)        0 (0%)      0 (0%)           0 (0%)         16h
+  dev-kafka                               dev-kafka-cluster-cruise-control-65f9b96bd6-dp54g         1 (6%)        2 (12%)     2Gi (3%)         4Gi (6%)       32d
+  dev-kafka                               dev-kafka-cluster-entity-operator-656dcf5cdd-q9hbr        0 (0%)        0 (0%)      0 (0%)           0 (0%)         36m
+  dev-merchant                            merchant-merchantservice-6c86b4b5fb-6hctz                 100m (0%)     2 (12%)     128Mi (0%)       1Gi (1%)       47h
+  dev-sbiepay                             javasimulator-javautilityapisimulator-869c8dc78f-sgsl2    100m (0%)     2 (12%)     128Mi (0%)       1Gi (1%)       33d
+  dynatrace                               dynatrace-oneagent-csi-driver-55ptq                       390m (2%)     90m (0%)    260Mi (0%)       160Mi (0%)     32d
+  dynatrace                               epayuat-oneagent-xhtx5                                    100m (0%)     0 (0%)      0 (0%)           0 (0%)         32d
+  istio-cni                               istio-cni-node-m42j8                                      100m (0%)     0 (0%)      100Mi (0%)       0 (0%)         3d19h
+  openshift-cluster-csi-drivers           vmware-vsphere-csi-driver-node-78hlc                      30m (0%)      0 (0%)      150Mi (0%)       0 (0%)         33d
+  openshift-cluster-node-tuning-operator  tuned-cgxzf                                               10m (0%)      0 (0%)      50Mi (0%)        0 (0%)         33d
+  openshift-dns                           dns-default-jkpnx                                         60m (0%)      0 (0%)      110Mi (0%)       0 (0%)         33d
+  openshift-dns                           node-resolver-p64qx                                       5m (0%)       0 (0%)      21Mi (0%)        0 (0%)         33d
+  openshift-image-registry                node-ca-tb5xj                                             10m (0%)      0 (0%)      10Mi (0%)        0 (0%)         33d
+  openshift-ingress-canary                ingress-canary-qzhqs                                      10m (0%)      0 (0%)      20Mi (0%)        0 (0%)         33d
+  openshift-logging                       collector-ggvls                                           500m (3%)     6 (38%)     64Mi (0%)        2Gi (3%)       3d23h
+  openshift-machine-config-operator       kube-rbac-proxy-crio-worker1.dev.sbiepay.sbi              20m (0%)      0 (0%)      50Mi (0%)        0 (0%)         33d
+  openshift-machine-config-operator       machine-config-daemon-r9ldb                               40m (0%)      0 (0%)      100Mi (0%)       0 (0%)         33d
+  openshift-monitoring                    node-exporter-zzq9h                                       9m (0%)       0 (0%)      47Mi (0%)        0 (0%)         33d
+  openshift-multus                        multus-additional-cni-plugins-nhb7q                       10m (0%)      0 (0%)      10Mi (0%)        0 (0%)         33d
+  openshift-multus                        multus-pvhjv                                              10m (0%)      0 (0%)      65Mi (0%)        0 (0%)         33d
+  openshift-multus                        network-metrics-daemon-8c5t5                              20m (0%)      0 (0%)      120Mi (0%)       0 (0%)         33d
+  openshift-network-diagnostics           network-check-target-j8s7k                                10m (0%)      0 (0%)      15Mi (0%)        0 (0%)         33d
+  openshift-network-operator              iptables-alerter-jbzdt                                    10m (0%)      10m (0%)    65Mi (0%)        0 (0%)         33d
+  openshift-ovn-kubernetes                ovnkube-node-pnhqr                                        80m (0%)      0 (0%)      1630Mi (2%)      0 (0%)         33d
+  sit-istio-system                        sit-istio-gateway-786776cfff-n44ll                        100m (0%)     2 (12%)     128Mi (0%)       1Gi (1%)       33d
+  telnet                                  telnet-server-6ddc69dbdf-5spxr                            100m (0%)     2 (12%)     128Mi (0%)       1Gi (1%)       33d
+  trident                                 trident-node-linux-rv2gf                                  0 (0%)        0 (0%)      0 (0%)           0 (0%)         32d
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests      Limits
+  --------           --------      ------
+  cpu                5424m (34%)   32100m (207%)
+  memory             6465Mi (10%)  17044Mi (26%)
+  ephemeral-storage  0 (0%)        0 (0%)
+  hugepages-1Gi      0 (0%)        0 (0%)
+  hugepages-2Mi      0 (0%)        0 (0%)
+Events:              <none>
+[osuser@bastion ~]$
