@@ -1,141 +1,559 @@
-[osuser@bastion ~]$ oc describe po dev-kafka-connect-mq-test-connect-0 -n dev-kafka
-Name:             dev-kafka-connect-mq-test-connect-0
-Namespace:        dev-kafka
-Priority:         0
-Service Account:  dev-kafka-connect-mq-test-connect
-Node:             worker2.dev.sbiepay.sbi/10.177.142.142
-Start Time:       Wed, 24 Dec 2025 06:18:57 +0000
-Labels:           app.kubernetes.io/instance=dev-kafka-connect-mq-test
-                  app.kubernetes.io/managed-by=strimzi-cluster-operator
-                  app.kubernetes.io/name=kafka-connect
-                  app.kubernetes.io/part-of=strimzi-dev-kafka-connect-mq-test
-                  com.company=Red_Hat
-                  environment=dev
-                  rht.comp=AMQ_Streams
-                  rht.comp_ver=3.0.1
-                  rht.prod_name=Red_Hat_Application_Foundations
-                  rht.prod_ver=2025.Q3
-                  rht.subcomp=kafka-connect
-                  rht.subcomp_t=application
-                  strimzi.io/cluster=dev-kafka-connect-mq-test
-                  strimzi.io/component-type=kafka-connect
-                  strimzi.io/controller=strimzipodset
-                  strimzi.io/controller-name=dev-kafka-connect-mq-test-connect
-                  strimzi.io/kind=KafkaConnect
-                  strimzi.io/name=dev-kafka-connect-mq-test-connect
-                  strimzi.io/pod-name=dev-kafka-connect-mq-test-connect-0
-Annotations:      k8s.ovn.org/pod-networks:
-                    {"default":{"ip_addresses":["172.16.14.18/23"],"mac_address":"0a:58:ac:10:0e:12","gateway_ips":["172.16.14.1"],"routes":[{"dest":"172.16.0...
-                  k8s.v1.cni.cncf.io/network-status:
-                    [{
-                        "name": "ovn-kubernetes",
-                        "interface": "eth0",
-                        "ips": [
-                            "172.16.14.18"
-                        ],
-                        "mac": "0a:58:ac:10:0e:12",
-                        "default": true,
-                        "dns": {}
-                    }]
-                  openshift.io/scc: restricted-v2
-                  seccomp.security.alpha.kubernetes.io/pod: runtime/default
-                  strimzi.io/auth-hash: -781680270
-                  strimzi.io/configuration-hash: e78f6330
-                  strimzi.io/logging-hash: 06ee78c4
-                  strimzi.io/revision: 91bfd2f5
-Status:           Pending
-SeccompProfile:   RuntimeDefault
-IP:               172.16.14.18
-IPs:
-  IP:           172.16.14.18
-Controlled By:  StrimziPodSet/dev-kafka-connect-mq-test-connect
-Containers:
-  dev-kafka-connect-mq-test-connect:
-    Container ID:
-    Image:         registry.dev.sbiepay.sbi:8443/library/kafka-connect-mq:v1
-    Image ID:
-    Port:          8083/TCP
-    Host Port:     0/TCP
-    Args:
-      /opt/kafka/kafka_connect_run.sh
-    State:          Waiting
-      Reason:       CreateContainerError
-    Ready:          False
-    Restart Count:  0
-    Limits:
-      cpu:     4
-      memory:  8Gi
-    Requests:
-      cpu:      2
-      memory:   4Gi
-    Liveness:   http-get http://:rest-api/health delay=60s timeout=5s period=10s #success=1 #failure=3
-    Readiness:  http-get http://:rest-api/health delay=60s timeout=5s period=10s #success=1 #failure=3
-    Environment:
-      KAFKA_CONNECT_METRICS_ENABLED:     false
-      STRIMZI_KAFKA_GC_LOG_ENABLED:      false
-      STRIMZI_DYNAMIC_HEAP_PERCENTAGE:   75
-      KAFKA_CONNECT_TRUSTED_CERTS:       dev-kafka-cluster-cluster-ca-cert/*.crt
-      KAFKA_CONNECT_SASL_USERNAME:       epay-user
-      KAFKA_CONNECT_SASL_PASSWORD_FILE:  epay-user/password
-      KAFKA_CONNECT_SASL_MECHANISM:      scram-sha-512
-    Mounts:
-      /opt/kafka/connect-certs/dev-kafka-cluster-cluster-ca-cert from dev-kafka-cluster-cluster-ca-cert (rw)
-      /opt/kafka/connect-password/epay-user from epay-user (rw)
-      /opt/kafka/custom-config/ from kafka-connect-configurations (rw)
-      /tmp from strimzi-tmp (rw)
-      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-zrwxz (ro)
-Conditions:
-  Type                        Status
-  PodReadyToStartContainers   True
-  Initialized                 True
-  Ready                       False
-  ContainersReady             False
-  PodScheduled                True
-Volumes:
-  strimzi-tmp:
-    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
-    Medium:     Memory
-    SizeLimit:  5Mi
-  kafka-connect-configurations:
-    Type:      ConfigMap (a volume populated by a ConfigMap)
-    Name:      dev-kafka-connect-mq-test-connect-config
-    Optional:  false
-  dev-kafka-cluster-cluster-ca-cert:
-    Type:        Secret (a volume populated by a Secret)
-    SecretName:  dev-kafka-cluster-cluster-ca-cert
-    Optional:    false
-  epay-user:
-    Type:        Secret (a volume populated by a Secret)
-    SecretName:  epay-user
-    Optional:    false
-  kube-api-access-zrwxz:
-    Type:                    Projected (a volume that contains injected data from multiple sources)
-    TokenExpirationSeconds:  3607
-    ConfigMapName:           kube-root-ca.crt
-    ConfigMapOptional:       <nil>
-    DownwardAPI:             true
-    ConfigMapName:           openshift-service-ca.crt
-    ConfigMapOptional:       <nil>
-QoS Class:                   Burstable
-Node-Selectors:              env=dev
-Tolerations:                 node.kubernetes.io/memory-pressure:NoSchedule op=Exists
-                             node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
-                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
-Events:
-  Type     Reason                           Age                 From               Message
-  ----     ------                           ----                ----               -------
-  Normal   Scheduled                        114s                default-scheduler  Successfully assigned dev-kafka/dev-kafka-connect-mq-test-connect-0 to worker2.dev.sbiepay.sbi
-  Normal   AddedInterface                   114s                multus             Add eth0 [172.16.14.18/23] from ovn-kubernetes
-  Normal   Pulling                          114s                kubelet            Pulling image "registry.dev.sbiepay.sbi:8443/library/kafka-connect-mq:v1"
-  Normal   Pulled                           110s                kubelet            Successfully pulled image "registry.dev.sbiepay.sbi:8443/library/kafka-connect-mq:v1" in 4.022s (4.022s including waiting). Image size: 449639239 bytes.
-  Warning  Failed                           110s                kubelet            Error: container create failed: time="2025-12-24T06:19:02Z" level=error msg="runc create failed: unable to start container process: exec: \"/opt/kafka/kafka_connect_run.sh\": stat /opt/kafka/kafka_connect_run.sh: no such file or directory"
-  Warning  Failed                           109s                kubelet            Error: container create failed: time="2025-12-24T06:19:03Z" level=error msg="runc create failed: unable to start container process: exec: \"/opt/kafka/kafka_connect_run.sh\": stat /opt/kafka/kafka_connect_run.sh: no such file or directory"
-  Warning  Failed                           96s                 kubelet            Error: container create failed: time="2025-12-24T06:19:16Z" level=error msg="runc create failed: unable to start container process: exec: \"/opt/kafka/kafka_connect_run.sh\": stat /opt/kafka/kafka_connect_run.sh: no such file or directory"
-  Warning  Failed                           84s                 kubelet            Error: container create failed: time="2025-12-24T06:19:28Z" level=error msg="runc create failed: unable to start container process: exec: \"/opt/kafka/kafka_connect_run.sh\": stat /opt/kafka/kafka_connect_run.sh: no such file or directory"
-  Warning  Failed                           69s                 kubelet            Error: container create failed: time="2025-12-24T06:19:43Z" level=error msg="runc create failed: unable to start container process: exec: \"/opt/kafka/kafka_connect_run.sh\": stat /opt/kafka/kafka_connect_run.sh: no such file or directory"
-  Warning  Failed                           57s                 kubelet            Error: container create failed: time="2025-12-24T06:19:55Z" level=error msg="runc create failed: unable to start container process: exec: \"/opt/kafka/kafka_connect_run.sh\": stat /opt/kafka/kafka_connect_run.sh: no such file or directory"
-  Warning  Failed                           43s                 kubelet            Error: container create failed: time="2025-12-24T06:20:09Z" level=error msg="runc create failed: unable to start container process: exec: \"/opt/kafka/kafka_connect_run.sh\": stat /opt/kafka/kafka_connect_run.sh: no such file or directory"
-  Normal   Pulled                           32s (x7 over 110s)  kubelet            Container image "registry.dev.sbiepay.sbi:8443/library/kafka-connect-mq:v1" already present on machine
-  Warning  FailedToRetrieveImagePullSecret  32s (x8 over 114s)  kubelet            Unable to retrieve some image pull secrets (microservices-dev-pull-secret); attempting to pull the image may not succeed.
-  Warning  Failed                           32s                 kubelet            Error: container create failed: time="2025-12-24T06:20:20Z" level=error msg="runc create failed: unable to start container process: exec: \"/opt/kafka/kafka_connect_run.sh\": stat /opt/kafka/kafka_connect_run.sh: no such file or directory"
-[osuser@bastion ~]$
+Preparing MirrorMaker 2 cluster truststores and keystores
+Preparing MirrorMaker 2 truststores and keystores for cluster source
+  with trusted certs 
+  with tls auth certs 
+  with tls auth keys 
+  with OAuth trusted certs 
+Preparing MirrorMaker 2 truststores and keystores for cluster target
+  with trusted certs pre-prod-dr-tls-cert-mm/ca.crt;pre-prod-dc-kafka-cluster-cluster-ca-cert/ca.crt
+  with tls auth certs 
+  with tls auth keys 
+  with OAuth trusted certs 
+Preparing /tmp/kafka/clusters/target.truststore.p12 truststore
+Adding /opt/kafka/mm2-certs/target/pre-prod-dr-tls-cert-mm/ca.crt to truststore /tmp/kafka/clusters/target.truststore.p12 with alias /opt/kafka/mm2-certs/target/pre-prod-dr-tls-cert-mm/ca.crt
+Certificate was added to keystore
+Adding /opt/kafka/mm2-certs/target/pre-prod-dc-kafka-cluster-cluster-ca-cert/ca.crt to truststore /tmp/kafka/clusters/target.truststore.p12 with alias /opt/kafka/mm2-certs/target/pre-prod-dc-kafka-cluster-cluster-ca-cert/ca.crt
+Certificate was added to keystore
+Preparing MirrorMaker 2 cluster truststores is complete
+Creating connector configuration:
+# TLS / SSL
+ssl.truststore.password=[hidden]
+
+
+
+
+
+
+
+
+
+Preparing Connect truststore
+Adding /opt/kafka/connect-certs/pre-prod-dr-tls-cert-mm/ca.crt to truststore /tmp/kafka/cluster.truststore.p12 with alias /opt/kafka/connect-certs/pre-prod-dr-tls-cert-mm/ca.crt
+Certificate was added to keystore
+Adding /opt/kafka/connect-certs/pre-prod-dc-kafka-cluster-cluster-ca-cert/ca.crt to truststore /tmp/kafka/cluster.truststore.p12 with alias /opt/kafka/connect-certs/pre-prod-dc-kafka-cluster-cluster-ca-cert/ca.crt
+Certificate was added to keystore
+Starting Kafka Connect with configuration:
+# Bootstrap servers
+bootstrap.servers=pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local:9092
+# REST Listeners
+rest.advertised.host.name=pre-prod-dc-kafka-mirror-maker-mirrormaker2-0.pre-prod-dc-kafka-mirror-maker-mirrormaker2.pre-prod-dc-kafka.svc
+rest.advertised.port=8083
+# Plugins
+plugin.path=/opt/kafka/plugins
+# Provided configuration
+config.storage.topic=mirrormaker2-cluster-configs
+group.id=mirrormaker2-cluster
+status.storage.topic=mirrormaker2-cluster-status
+config.providers.file.class=org.apache.kafka.common.config.provider.FileConfigProvider
+offset.storage.topic=mirrormaker2-cluster-offsets
+config.providers=file
+value.converter=org.apache.kafka.connect.converters.ByteArrayConverter
+key.converter=org.apache.kafka.connect.converters.ByteArrayConverter
+header.converter=org.apache.kafka.connect.converters.ByteArrayConverter
+config.storage.replication.factor=-1
+offset.storage.replication.factor=-1
+status.storage.replication.factor=-1
+
+
+security.protocol=SSL
+producer.security.protocol=SSL
+consumer.security.protocol=SSL
+admin.security.protocol=SSL
+# TLS / SSL
+ssl.truststore.location=/tmp/kafka/cluster.truststore.p12
+ssl.truststore.password=[hidden]
+ssl.truststore.type=PKCS12
+
+producer.ssl.truststore.location=/tmp/kafka/cluster.truststore.p12
+producer.ssl.truststore.password=[hidden]
+
+consumer.ssl.truststore.location=/tmp/kafka/cluster.truststore.p12
+consumer.ssl.truststore.password=[hidden]
+
+admin.ssl.truststore.location=/tmp/kafka/cluster.truststore.p12
+admin.ssl.truststore.password=[hidden]
+
+
+
+# Additional configuration
+consumer.client.rack=
+
+Configuring Java heap: -Xms3221225472 -Xmx3221225472
++ exec /usr/bin/tini -w -e 143 -- /opt/kafka/bin/connect-distributed.sh /tmp/strimzi-connect.properties
+2026-01-03 11:06:02,967 INFO Kafka Connect worker initializing ... (org.apache.kafka.connect.cli.AbstractConnectCli) [main]
+2026-01-03 11:06:02,972 INFO WorkerInfo values: 
+	jvm.args = -Xms3221225472, -Xmx3221225472, -XX:+UseG1GC, -XX:MaxGCPauseMillis=20, -XX:InitiatingHeapOccupancyPercent=35, -XX:+ExplicitGCInvokesConcurrent, -XX:MaxInlineLevel=15, -Djava.awt.headless=true, -Dcom.sun.management.jmxremote=true, -Dcom.sun.management.jmxremote.authenticate=false, -Dcom.sun.management.jmxremote.ssl=false, -Dkafka.logs.dir=/opt/kafka, -Dlog4j.configuration=file:/opt/kafka/custom-config/log4j.properties
+	jvm.spec = Red Hat, Inc., OpenJDK 64-Bit Server VM, 17.0.14, 17.0.14+7-LTS
+	jvm.classpath = /opt/kafka/bin/../libs/accessors-smart-2.4.9.redhat-00002.jar:/opt/kafka/bin/../libs/activation-1.1.1.redhat-5.jar:/opt/kafka/bin/../libs/animal-sniffer-annotations-1.23.0.redhat-00001.jar:/opt/kafka/bin/../libs/aopalliance-repackaged-2.6.1.redhat-00001.jar:/opt/kafka/bin/../libs/argparse4j-0.7.0.redhat-00004.jar:/opt/kafka/bin/../libs/audience-annotations-0.12.0.redhat-00001.jar:/opt/kafka/bin/../libs/caffeine-2.9.3.redhat-00003.jar:/opt/kafka/bin/../libs/commons-beanutils-1.9.4.redhat-00003.jar:/opt/kafka/bin/../libs/commons-cli-1.4.0.redhat-00003.jar:/opt/kafka/bin/../libs/commons-collections-3.2.2.redhat-2.jar:/opt/kafka/bin/../libs/commons-digester-2.1.0.redhat-00002.jar:/opt/kafka/bin/../libs/commons-io-2.15.1.redhat-00001.jar:/opt/kafka/bin/../libs/commons-lang-2.6.0.redhat-7.jar:/opt/kafka/bin/../libs/commons-lang3-3.12.0.redhat-00002.jar:/opt/kafka/bin/../libs/commons-logging-1.2.0.redhat-00010.jar:/opt/kafka/bin/../libs/commons-validator-1.7.0.redhat-00005.jar:/opt/kafka/bin/../libs/connect-api-3.9.0.redhat-00003.jar:/opt/kafka/bin/../libs/connect-basic-auth-extension-3.9.0.redhat-00003.jar:/opt/kafka/bin/../libs/connect-json-3.9.0.redhat-00003.jar:/opt/kafka/bin/../libs/connect-mirror-3.9.0.redhat-00003.jar:/opt/kafka/bin/../libs/connect-mirror-client-3.9.0.redhat-00003.jar:/opt/kafka/bin/../libs/connect-runtime-3.9.0.redhat-00003.jar:/opt/kafka/bin/../libs/connect-transforms-3.9.0.redhat-00003.jar:/opt/kafka/bin/../libs/cruise-control-metrics-reporter-2.5.141.redhat-00002.jar:/opt/kafka/bin/../libs/error_prone_annotations-2.10.0.redhat-00001.jar:/opt/kafka/bin/../libs/failureaccess-1.0.1.redhat-00013.jar:/opt/kafka/bin/../libs/grpc-api-1.61.0.redhat-00004.jar:/opt/kafka/bin/../libs/grpc-context-1.61.0.redhat-00004.jar:/opt/kafka/bin/../libs/grpc-core-1.61.0.redhat-00004.jar:/opt/kafka/bin/../libs/grpc-netty-shaded-1.61.0.redhat-00004.jar:/opt/kafka/bin/../libs/grpc-stub-1.61.0.redhat-00004.jar:/opt/kafka/bin/../libs/grpc-util-1.61.0.redhat-00004.jar:/opt/kafka/bin/../libs/gson-2.10.1.redhat-00004.jar:/opt/kafka/bin/../libs/guava-32.1.3.jre-redhat-00001.jar:/opt/kafka/bin/../libs/hk2-api-2.6.1.redhat-00001.jar:/opt/kafka/bin/../libs/hk2-locator-2.6.1.redhat-00001.jar:/opt/kafka/bin/../libs/hk2-utils-2.6.1.redhat-00001.jar:/opt/kafka/bin/../libs/j2objc-annotations-2.8.0.redhat-00002.jar:/opt/kafka/bin/../libs/jackson-annotations-2.16.2.redhat-00001.jar:/opt/kafka/bin/../libs/jackson-core-2.16.2.redhat-00001.jar:/opt/kafka/bin/../libs/jackson-databind-2.16.2.redhat-00001.jar:/opt/kafka/bin/../libs/jackson-dataformat-csv-2.16.2.redhat-00001.jar:/opt/kafka/bin/../libs/jackson-dataformat-yaml-2.16.2.redhat-00001.jar:/opt/kafka/bin/../libs/jackson-datatype-jdk8-2.16.2.redhat-00001.jar:/opt/kafka/bin/../libs/jackson-datatype-jsr310-2.16.2.redhat-00001.jar:/opt/kafka/bin/../libs/jackson-jaxrs-base-2.16.2.redhat-00001.jar:/opt/kafka/bin/../libs/jackson-jaxrs-json-provider-2.16.2.redhat-00001.jar:/opt/kafka/bin/../libs/jackson-module-afterburner-2.16.2.redhat-00001.jar:/opt/kafka/bin/../libs/jackson-module-jaxb-annotations-2.16.2.redhat-00001.jar:/opt/kafka/bin/../libs/jackson-module-scala_2.13-2.16.2.redhat-00001.jar:/opt/kafka/bin/../libs/jakarta.activation-api-1.2.2.redhat-00003.jar:/opt/kafka/bin/../libs/jakarta.annotation-api-1.3.5.redhat-00004.jar:/opt/kafka/bin/../libs/jakarta.inject-2.6.1.redhat-00001.jar:/opt/kafka/bin/../libs/jakarta.validation-api-2.0.2.redhat-00002.jar:/opt/kafka/bin/../libs/jakarta.ws.rs-api-2.1.6.redhat-00001.jar:/opt/kafka/bin/../libs/jakarta.xml.bind-api-2.3.3.redhat-00003.jar:/opt/kafka/bin/../libs/javassist-3.29.2.GA-redhat-00003.jar:/opt/kafka/bin/../libs/javax.activation-api-1.2.0.redhat-00002.jar:/opt/kafka/bin/../libs/javax.annotation-api-1.3.2.redhat-00003.jar:/opt/kafka/bin/../libs/javax.servlet-api-3.1.0.redhat-1.jar:/opt/kafka/bin/../libs/javax.ws.rs-api-2.1.1.redhat-00004.jar:/opt/kafka/bin/../libs/jaxb-api-2.3.1.redhat-00002.jar:/opt/kafka/bin/../libs/jersey-client-2.39.1.redhat-00001.jar:/opt/kafka/bin/../libs/jersey-common-2.39.1.redhat-00001.jar:/opt/kafka/bin/../libs/jersey-container-servlet-2.39.1.redhat-00001.jar:/opt/kafka/bin/../libs/jersey-container-servlet-core-2.39.1.redhat-00001.jar:/opt/kafka/bin/../libs/jersey-hk2-2.39.1.redhat-00001.jar:/opt/kafka/bin/../libs/jersey-server-2.39.1.redhat-00001.jar:/opt/kafka/bin/../libs/jetty-client-9.4.56.v20240826-redhat-00001.jar:/opt/kafka/bin/../libs/jetty-continuation-9.4.56.v20240826-redhat-00001.jar:/opt/kafka/bin/../libs/jetty-http-9.4.56.v20240826-redhat-00001.jar:/opt/kafka/bin/../libs/jetty-io-9.4.56.v20240826-redhat-00001.jar:/opt/kafka/bin/../libs/jetty-security-9.4.56.v20240826-redhat-00001.jar:/opt/kafka/bin/../libs/jetty-server-9.4.56.v20240826-redhat-00001.jar:/opt/kafka/bin/../libs/jetty-servlet-9.4.56.v20240826-redhat-00001.jar:/opt/kafka/bin/../libs/jetty-servlets-9.4.56.v20240826-redhat-00001.jar:/opt/kafka/bin/../libs/jetty-util-9.4.56.v20240826-redhat-00001.jar:/opt/kafka/bin/../libs/jetty-util-ajax-9.4.56.v20240826-redhat-00001.jar:/opt/kafka/bin/../libs/jline-3.25.1.redhat-00001.jar:/opt/kafka/bin/../libs/jmx_prometheus_javaagent-1.0.1.redhat-00001.jar:/opt/kafka/bin/../libs/jopt-simple-5.0.4.redhat-00002.jar:/opt/kafka/bin/../libs/jose4j-0.9.4.redhat-00001.jar:/opt/kafka/bin/../libs/json-path-2.9.0.redhat-00001.jar:/opt/kafka/bin/../libs/json-smart-2.4.9.redhat-00002.jar:/opt/kafka/bin/../libs/jsonevent-layout-1.7.0.redhat-00002.jar:/opt/kafka/bin/../libs/jsr305-3.0.2.redhat-00016.jar:/opt/kafka/bin/../libs/kafka-agent-0.45.0.redhat-00003.jar:/opt/kafka/bin/../libs/kafka-clients-3.9.0.redhat-00003.jar:/opt/kafka/bin/../libs/kafka-env-var-config-provider-1.1.0.redhat-00006.jar:/opt/kafka/bin/../libs/kafka-group-coordinator-3.9.0.redhat-00003.jar:/opt/kafka/bin/../libs/kafka-group-coordinator-api-3.9.0.redhat-00003.jar:/opt/kafka/bin/../libs/kafka-kubernetes-config-provider-1.2.0.redhat-00001.jar:/opt/kafka/bin/../libs/kafka-metadata-3.9.0.redhat-00003.jar:/opt/kafka/bin/../libs/kafka-oauth-client-0.15.0.redhat-00012.jar:/opt/kafka/bin/../libs/kafka-oauth-common-0.15.0.redhat-00012.jar:/opt/kafka/bin/../libs/kafka-oauth-keycloak-authorizer-0.15.0.redhat-00012.jar:/opt/kafka/bin/../libs/kafka-oauth-server-0.15.0.redhat-00012.jar:/opt/kafka/bin/../libs/kafka-oauth-server-plain-0.15.0.redhat-00012.jar:/opt/kafka/bin/../libs/kafka-quotas-plugin-0.3.1.redhat-00004.jar:/opt/kafka/bin/../libs/kafka-raft-3.9.0.redhat-00003.jar:/opt/kafka/bin/../libs/kafka-server-3.9.0.redhat-00003.jar:/opt/kafka/bin/../libs/kafka-server-common-3.9.0.redhat-00003.jar:/opt/kafka/bin/../libs/kafka-shell-3.9.0.redhat-00003.jar:/opt/kafka/bin/../libs/kafka-storage-3.9.0.redhat-00003.jar:/opt/kafka/bin/../libs/kafka-storage-api-3.9.0.redhat-00003.jar:/opt/kafka/bin/../libs/kafka-streams-3.9.0.redhat-00003.jar:/opt/kafka/bin/../libs/kafka-streams-scala_2.13-3.9.0.redhat-00003.jar:/opt/kafka/bin/../libs/kafka-tools-3.9.0.redhat-00003.jar:/opt/kafka/bin/../libs/kafka-tools-api-3.9.0.redhat-00003.jar:/opt/kafka/bin/../libs/kafka-transaction-coordinator-3.9.0.redhat-00003.jar:/opt/kafka/bin/../libs/kafka_2.13-3.9.0.redhat-00003.jar:/opt/kafka/bin/../libs/kubernetes-client-6.13.4.redhat-00001.jar:/opt/kafka/bin/../libs/kubernetes-client-api-6.13.4.redhat-00001.jar:/opt/kafka/bin/../libs/kubernetes-httpclient-jdk-6.13.4.redhat-00001.jar:/opt/kafka/bin/../libs/kubernetes-model-apps-6.13.4.redhat-00001.jar:/opt/kafka/bin/../libs/kubernetes-model-batch-6.13.4.redhat-00001.jar:/opt/kafka/bin/../libs/kubernetes-model-certificates-6.13.4.redhat-00001.jar:/opt/kafka/bin/../libs/kubernetes-model-common-6.13.4.redhat-00001.jar:/opt/kafka/bin/../libs/kubernetes-model-core-6.13.4.redhat-00001.jar:/opt/kafka/bin/../libs/kubernetes-model-extensions-6.13.4.redhat-00001.jar:/opt/kafka/bin/../libs/listenablefuture-9999.0.0.empty-to-avoid-conflict-with-guava-redhat-00004.jar:/opt/kafka/bin/../libs/lz4-java-1.8.0.redhat-00010.jar:/opt/kafka/bin/../libs/maven-artifact-3.9.6.redhat-00001.jar:/opt/kafka/bin/../libs/metrics-core-2.2.0.redhat-00004.jar:/opt/kafka/bin/../libs/metrics-core-4.1.12.1-redhat-00002.jar:/opt/kafka/bin/../libs/mirror-maker-2-extensions-1.2.0.redhat-00001.jar:/opt/kafka/bin/../libs/mirror-maker-agent-0.45.0.redhat-00003.jar:/opt/kafka/bin/../libs/netty-buffer-4.1.115.Final-redhat-00001.jar:/opt/kafka/bin/../libs/netty-codec-4.1.115.Final-redhat-00001.jar:/opt/kafka/bin/../libs/netty-common-4.1.115.Final-redhat-00001.jar:/opt/kafka/bin/../libs/netty-handler-4.1.115.Final-redhat-00001.jar:/opt/kafka/bin/../libs/netty-resolver-4.1.115.Final-redhat-00001.jar:/opt/kafka/bin/../libs/netty-transport-4.1.115.Final-redhat-00001.jar:/opt/kafka/bin/../libs/netty-transport-classes-epoll-4.1.115.Final-redhat-00001.jar:/opt/kafka/bin/../libs/netty-transport-native-epoll-4.1.115.Final-redhat-00001.jar:/opt/kafka/bin/../libs/netty-transport-native-unix-common-4.1.115.Final-redhat-00001.jar:/opt/kafka/bin/../libs/nimbus-jose-jwt-9.37.2.redhat-00002.jar:/opt/kafka/bin/../libs/opa-authorizer-1.5.1.redhat-00007.jar:/opt/kafka/bin/../libs/opentelemetry-api-1.34.1.redhat-00001.jar:/opt/kafka/bin/../libs/opentelemetry-api-events-1.34.1.alpha-redhat-00001.jar:/opt/kafka/bin/../libs/opentelemetry-context-1.34.1.redhat-00001.jar:/opt/kafka/bin/../libs/opentelemetry-exporter-common-1.34.1.redhat-00001.jar:/opt/kafka/bin/../libs/opentelemetry-exporter-otlp-1.34.1.redhat-00001.jar:/opt/kafka/bin/../libs/opentelemetry-exporter-otlp-common-1.34.1.redhat-00001.jar:/opt/kafka/bin/../libs/opentelemetry-exporter-sender-grpc-managed-channel-1.34.1.redhat-00001.jar:/opt/kafka/bin/../libs/opentelemetry-exporter-sender-jdk-1.34.1.alpha-redhat-00001.jar:/opt/kafka/bin/../libs/opentelemetry-extension-incubator-1.32.0.alpha-redhat-00001.jar:/opt/kafka/bin/../libs/opentelemetry-instrumentation-api-1.32.0.redhat-00001.jar:/opt/kafka/bin/../libs/opentelemetry-instrumentation-api-semconv-1.32.0.redhat-00001.jar:/opt/kafka/bin/../libs/opentelemetry-kafka-clients-2.6-1.32.0.redhat-00001.jar:/opt/kafka/bin/../libs/opentelemetry-kafka-clients-common-1.32.0.redhat-00001.jar:/opt/kafka/bin/../libs/opentelemetry-proto-1.0.0.alpha-redhat-00002.jar:/opt/kafka/bin/../libs/opentelemetry-sdk-1.34.1.redhat-00001.jar:/opt/kafka/bin/../libs/opentelemetry-sdk-common-1.34.1.redhat-00001.jar:/opt/kafka/bin/../libs/opentelemetry-sdk-extension-autoconfigure-1.34.1.redhat-00001.jar:/opt/kafka/bin/../libs/opentelemetry-sdk-extension-autoconfigure-spi-1.34.1.redhat-00001.jar:/opt/kafka/bin/../libs/opentelemetry-sdk-logs-1.34.1.redhat-00001.jar:/opt/kafka/bin/../libs/opentelemetry-sdk-metrics-1.34.1.redhat-00001.jar:/opt/kafka/bin/../libs/opentelemetry-sdk-trace-1.34.1.redhat-00001.jar:/opt/kafka/bin/../libs/opentelemetry-semconv-1.21.0.alpha-redhat-00001.jar:/opt/kafka/bin/../libs/osgi-resource-locator-1.0.3.redhat-00001.jar:/opt/kafka/bin/../libs/paranamer-2.8.0.redhat-00001.jar:/opt/kafka/bin/../libs/pcollections-4.0.1.redhat-00001.jar:/opt/kafka/bin/../libs/perfmark-api-0.26.0.redhat-00003.jar:/opt/kafka/bin/../libs/plexus-utils-3.5.1.redhat-00002.jar:/opt/kafka/bin/../libs/protobuf-java-3.25.5.redhat-00003.jar:/opt/kafka/bin/../libs/reflections-0.10.2.redhat-00001.jar:/opt/kafka/bin/../libs/reload4j-1.2.25.redhat-00002.jar:/opt/kafka/bin/../libs/rocksdbjni-7.9.2.redhat-00006.jar:/opt/kafka/bin/../libs/scala-collection-compat_2.13-2.10.0.redhat-00001.jar:/opt/kafka/bin/../libs/scala-java8-compat_2.13-1.0.2.redhat-00001.jar:/opt/kafka/bin/../libs/scala-library-2.13.14.redhat-00002.jar:/opt/kafka/bin/../libs/scala-logging_2.13-3.9.5.redhat-00001.jar:/opt/kafka/bin/../libs/scala-reflect-2.13.14.redhat-00002.jar:/opt/kafka/bin/../libs/slf4j-api-1.7.36.redhat-00006.jar:/opt/kafka/bin/../libs/slf4j-reload4j-1.7.36.redhat-00006.jar:/opt/kafka/bin/../libs/snakeyaml-2.2.0.redhat-00001.jar:/opt/kafka/bin/../libs/snakeyaml-engine-2.7.0.redhat-00006.jar:/opt/kafka/bin/../libs/snappy-java-1.1.10.5-redhat-00007.jar:/opt/kafka/bin/../libs/swagger-annotations-2.2.8.redhat-00001.jar:/opt/kafka/bin/../libs/tracing-agent-0.45.0.redhat-00003.jar:/opt/kafka/bin/../libs/zjsonpatch-0.3.0.redhat-00004.jar:/opt/kafka/bin/../libs/zookeeper-3.8.4.redhat-00016.jar:/opt/kafka/bin/../libs/zookeeper-jute-3.8.4.redhat-00016.jar:/opt/kafka/bin/../libs/zstd-jni-1.5.6.4-redhat-00003.jar
+	os.spec = Linux, amd64, 5.14.0-427.87.1.el9_4.x86_64
+	os.vcpus = 2
+ (org.apache.kafka.connect.runtime.WorkerInfo) [main]
+2026-01-03 11:06:02,972 INFO Scanning for plugin classes. This might take a moment ... (org.apache.kafka.connect.cli.AbstractConnectCli) [main]
+2026-01-03 11:06:02,984 ERROR Could not get listing for plugin path: /opt/kafka/plugins. Ignoring. (org.apache.kafka.connect.runtime.isolation.PluginUtils) [main]
+java.io.FileNotFoundException: /opt/kafka/plugins
+	at org.apache.kafka.connect.runtime.isolation.PluginUtils.pluginLocations(PluginUtils.java:214)
+	at org.apache.kafka.connect.runtime.isolation.Plugins.<init>(Plugins.java:73)
+	at org.apache.kafka.connect.runtime.isolation.Plugins.<init>(Plugins.java:65)
+	at org.apache.kafka.connect.cli.AbstractConnectCli.startConnect(AbstractConnectCli.java:121)
+	at org.apache.kafka.connect.cli.AbstractConnectCli.run(AbstractConnectCli.java:95)
+	at org.apache.kafka.connect.cli.ConnectDistributed.main(ConnectDistributed.java:112)
+2026-01-03 11:06:03,027 INFO Loading plugin from: classpath (org.apache.kafka.connect.runtime.isolation.PluginScanner) [main]
+2026-01-03 11:06:03,302 INFO Registered loader: jdk.internal.loader.ClassLoaders$AppClassLoader@2b2fa4f7 (org.apache.kafka.connect.runtime.isolation.PluginScanner) [main]
+2026-01-03 11:06:03,303 INFO Scanning plugins with ServiceLoaderScanner took 277 ms (org.apache.kafka.connect.runtime.isolation.PluginScanner) [main]
+2026-01-03 11:06:03,304 INFO Loading plugin from: classpath (org.apache.kafka.connect.runtime.isolation.PluginScanner) [main]
+2026-01-03 11:06:07,655 INFO Registered loader: jdk.internal.loader.ClassLoaders$AppClassLoader@2b2fa4f7 (org.apache.kafka.connect.runtime.isolation.PluginScanner) [main]
+2026-01-03 11:06:07,655 INFO Scanning plugins with ReflectionScanner took 4351 ms (org.apache.kafka.connect.runtime.isolation.PluginScanner) [main]
+2026-01-03 11:06:07,659 WARN All plugins have ServiceLoader manifests, consider reconfiguring plugin.discovery=service_load (org.apache.kafka.connect.runtime.isolation.Plugins) [main]
+2026-01-03 11:06:07,660 INFO Added plugin 'org.apache.kafka.connect.transforms.ReplaceField$Key' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,660 INFO Added plugin 'org.apache.kafka.connect.transforms.Filter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,660 INFO Added plugin 'org.apache.kafka.connect.mirror.MirrorSourceConnector' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,660 INFO Added plugin 'org.apache.kafka.connect.transforms.InsertField$Value' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,660 INFO Added plugin 'io.strimzi.kafka.EnvVarConfigProvider' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,660 INFO Added plugin 'org.apache.kafka.connect.converters.DoubleConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,660 INFO Added plugin 'org.apache.kafka.connect.connector.policy.AllConnectorClientConfigOverridePolicy' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,660 INFO Added plugin 'org.apache.kafka.connect.connector.policy.PrincipalConnectorClientConfigOverridePolicy' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,660 INFO Added plugin 'org.apache.kafka.connect.transforms.DropHeaders' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,660 INFO Added plugin 'org.apache.kafka.connect.transforms.Cast$Key' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,660 INFO Added plugin 'org.apache.kafka.connect.storage.SimpleHeaderConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,661 INFO Added plugin 'org.apache.kafka.connect.transforms.InsertHeader' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,661 INFO Added plugin 'org.apache.kafka.common.config.provider.DirectoryConfigProvider' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,661 INFO Added plugin 'org.apache.kafka.connect.transforms.Flatten$Key' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,661 INFO Added plugin 'org.apache.kafka.connect.mirror.MirrorCheckpointConnector' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,661 INFO Added plugin 'org.apache.kafka.connect.transforms.HeaderFrom$Value' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,661 INFO Added plugin 'org.apache.kafka.connect.transforms.SetSchemaMetadata$Key' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,661 INFO Added plugin 'org.apache.kafka.connect.transforms.predicates.TopicNameMatches' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,661 INFO Added plugin 'org.apache.kafka.connect.transforms.ReplaceField$Value' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,661 INFO Added plugin 'org.apache.kafka.connect.transforms.SetSchemaMetadata$Value' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,661 INFO Added plugin 'org.apache.kafka.connect.converters.IntegerConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,661 INFO Added plugin 'org.apache.kafka.connect.transforms.predicates.RecordIsTombstone' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,661 INFO Added plugin 'org.apache.kafka.connect.connector.policy.NoneConnectorClientConfigOverridePolicy' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,661 INFO Added plugin 'org.apache.kafka.connect.converters.ByteArrayConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,661 INFO Added plugin 'org.apache.kafka.connect.transforms.Cast$Value' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,661 INFO Added plugin 'org.apache.kafka.connect.transforms.Flatten$Value' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,661 INFO Added plugin 'org.apache.kafka.connect.rest.basic.auth.extension.BasicAuthSecurityRestExtension' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,661 INFO Added plugin 'org.apache.kafka.connect.transforms.ExtractField$Value' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,661 INFO Added plugin 'org.apache.kafka.connect.transforms.TimestampConverter$Value' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,662 INFO Added plugin 'io.strimzi.kafka.KubernetesConfigMapConfigProvider' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,662 INFO Added plugin 'org.apache.kafka.connect.converters.FloatConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,662 INFO Added plugin 'org.apache.kafka.connect.transforms.TimestampConverter$Key' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,662 INFO Added plugin 'org.apache.kafka.connect.transforms.TimestampRouter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,662 INFO Added plugin 'org.apache.kafka.connect.transforms.RegexRouter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,662 INFO Added plugin 'org.apache.kafka.connect.transforms.HoistField$Value' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,662 INFO Added plugin 'org.apache.kafka.connect.transforms.ValueToKey' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,662 INFO Added plugin 'org.apache.kafka.connect.converters.LongConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,662 INFO Added plugin 'org.apache.kafka.common.config.provider.FileConfigProvider' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,662 INFO Added plugin 'org.apache.kafka.connect.json.JsonConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,662 INFO Added plugin 'org.apache.kafka.connect.transforms.HeaderFrom$Key' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,662 INFO Added plugin 'org.apache.kafka.connect.transforms.predicates.HasHeaderKey' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,662 INFO Added plugin 'org.apache.kafka.connect.transforms.MaskField$Value' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,662 INFO Added plugin 'org.apache.kafka.common.config.provider.EnvVarConfigProvider' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,662 INFO Added plugin 'org.apache.kafka.connect.storage.StringConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,662 INFO Added plugin 'org.apache.kafka.connect.transforms.MaskField$Key' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,662 INFO Added plugin 'org.apache.kafka.connect.transforms.ExtractField$Key' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,662 INFO Added plugin 'org.apache.kafka.connect.transforms.InsertField$Key' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,663 INFO Added plugin 'org.apache.kafka.connect.converters.BooleanConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,663 INFO Added plugin 'io.strimzi.kafka.KubernetesSecretConfigProvider' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,663 INFO Added plugin 'org.apache.kafka.connect.mirror.MirrorHeartbeatConnector' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,663 INFO Added plugin 'org.apache.kafka.connect.transforms.HoistField$Key' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,663 INFO Added plugin 'org.apache.kafka.connect.converters.ShortConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,665 INFO Added alias 'RecordIsTombstone' to plugin 'org.apache.kafka.connect.transforms.predicates.RecordIsTombstone' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,665 INFO Added alias 'String' to plugin 'org.apache.kafka.connect.storage.StringConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,665 INFO Added alias 'MirrorCheckpointConnector' to plugin 'org.apache.kafka.connect.mirror.MirrorCheckpointConnector' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,665 INFO Added alias 'Boolean' to plugin 'org.apache.kafka.connect.converters.BooleanConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,665 INFO Added alias 'KubernetesSecret' to plugin 'io.strimzi.kafka.KubernetesSecretConfigProvider' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,666 INFO Added alias 'Json' to plugin 'org.apache.kafka.connect.json.JsonConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,666 INFO Added alias 'StringConverter' to plugin 'org.apache.kafka.connect.storage.StringConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,666 INFO Added alias 'IntegerConverter' to plugin 'org.apache.kafka.connect.converters.IntegerConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,666 INFO Added alias 'Float' to plugin 'org.apache.kafka.connect.converters.FloatConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,666 INFO Added alias 'LongConverter' to plugin 'org.apache.kafka.connect.converters.LongConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,666 INFO Added alias 'DropHeaders' to plugin 'org.apache.kafka.connect.transforms.DropHeaders' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,666 INFO Added alias 'SimpleHeaderConverter' to plugin 'org.apache.kafka.connect.storage.SimpleHeaderConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,666 INFO Added alias 'DirectoryConfigProvider' to plugin 'org.apache.kafka.common.config.provider.DirectoryConfigProvider' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,666 INFO Added alias 'ShortConverter' to plugin 'org.apache.kafka.connect.converters.ShortConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,666 INFO Added alias 'KubernetesSecretConfigProvider' to plugin 'io.strimzi.kafka.KubernetesSecretConfigProvider' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,666 INFO Added alias 'BasicAuthSecurityRestExtension' to plugin 'org.apache.kafka.connect.rest.basic.auth.extension.BasicAuthSecurityRestExtension' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,666 INFO Added alias 'KubernetesConfigMapConfigProvider' to plugin 'io.strimzi.kafka.KubernetesConfigMapConfigProvider' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,666 INFO Added alias 'Simple' to plugin 'org.apache.kafka.connect.storage.SimpleHeaderConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,667 INFO Added alias 'AllConnectorClientConfigOverridePolicy' to plugin 'org.apache.kafka.connect.connector.policy.AllConnectorClientConfigOverridePolicy' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,667 INFO Added alias 'MirrorSource' to plugin 'org.apache.kafka.connect.mirror.MirrorSourceConnector' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,667 INFO Added alias 'Directory' to plugin 'org.apache.kafka.common.config.provider.DirectoryConfigProvider' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,667 INFO Added alias 'MirrorHeartbeat' to plugin 'org.apache.kafka.connect.mirror.MirrorHeartbeatConnector' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,667 INFO Added alias 'BooleanConverter' to plugin 'org.apache.kafka.connect.converters.BooleanConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,667 INFO Added alias 'HasHeaderKey' to plugin 'org.apache.kafka.connect.transforms.predicates.HasHeaderKey' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,667 INFO Added alias 'MirrorCheckpoint' to plugin 'org.apache.kafka.connect.mirror.MirrorCheckpointConnector' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,667 INFO Added alias 'None' to plugin 'org.apache.kafka.connect.connector.policy.NoneConnectorClientConfigOverridePolicy' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,667 INFO Added alias 'TimestampRouter' to plugin 'org.apache.kafka.connect.transforms.TimestampRouter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,667 INFO Added alias 'Principal' to plugin 'org.apache.kafka.connect.connector.policy.PrincipalConnectorClientConfigOverridePolicy' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,667 INFO Added alias 'All' to plugin 'org.apache.kafka.connect.connector.policy.AllConnectorClientConfigOverridePolicy' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,667 INFO Added alias 'JsonConverter' to plugin 'org.apache.kafka.connect.json.JsonConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,667 INFO Added alias 'RegexRouter' to plugin 'org.apache.kafka.connect.transforms.RegexRouter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,667 INFO Added alias 'ByteArray' to plugin 'org.apache.kafka.connect.converters.ByteArrayConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,667 INFO Added alias 'NoneConnectorClientConfigOverridePolicy' to plugin 'org.apache.kafka.connect.connector.policy.NoneConnectorClientConfigOverridePolicy' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,667 INFO Added alias 'Short' to plugin 'org.apache.kafka.connect.converters.ShortConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,667 INFO Added alias 'Double' to plugin 'org.apache.kafka.connect.converters.DoubleConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,668 INFO Added alias 'FileConfigProvider' to plugin 'org.apache.kafka.common.config.provider.FileConfigProvider' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,668 INFO Added alias 'Long' to plugin 'org.apache.kafka.connect.converters.LongConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,668 INFO Added alias 'File' to plugin 'org.apache.kafka.common.config.provider.FileConfigProvider' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,668 INFO Added alias 'FloatConverter' to plugin 'org.apache.kafka.connect.converters.FloatConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,668 INFO Added alias 'ByteArrayConverter' to plugin 'org.apache.kafka.connect.converters.ByteArrayConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,668 INFO Added alias 'DoubleConverter' to plugin 'org.apache.kafka.connect.converters.DoubleConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,668 INFO Added alias 'TopicNameMatches' to plugin 'org.apache.kafka.connect.transforms.predicates.TopicNameMatches' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,668 INFO Added alias 'MirrorHeartbeatConnector' to plugin 'org.apache.kafka.connect.mirror.MirrorHeartbeatConnector' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,668 INFO Added alias 'InsertHeader' to plugin 'org.apache.kafka.connect.transforms.InsertHeader' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,668 INFO Added alias 'KubernetesConfigMap' to plugin 'io.strimzi.kafka.KubernetesConfigMapConfigProvider' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,668 INFO Added alias 'MirrorSourceConnector' to plugin 'org.apache.kafka.connect.mirror.MirrorSourceConnector' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,668 INFO Added alias 'PrincipalConnectorClientConfigOverridePolicy' to plugin 'org.apache.kafka.connect.connector.policy.PrincipalConnectorClientConfigOverridePolicy' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,668 INFO Added alias 'ValueToKey' to plugin 'org.apache.kafka.connect.transforms.ValueToKey' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,668 INFO Added alias 'Integer' to plugin 'org.apache.kafka.connect.converters.IntegerConverter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,668 INFO Added alias 'Filter' to plugin 'org.apache.kafka.connect.transforms.Filter' (org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader) [main]
+2026-01-03 11:06:07,751 INFO DistributedConfig values: 
+	access.control.allow.methods = 
+	access.control.allow.origin = 
+	admin.listeners = null
+	auto.include.jmx.reporter = true
+	bootstrap.servers = [pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local:9092]
+	client.dns.lookup = use_all_dns_ips
+	client.id = 
+	config.providers = [file]
+	config.storage.replication.factor = -1
+	config.storage.topic = mirrormaker2-cluster-configs
+	connect.protocol = sessioned
+	connections.max.idle.ms = 540000
+	connector.client.config.override.policy = All
+	exactly.once.source.support = disabled
+	group.id = mirrormaker2-cluster
+	header.converter = class org.apache.kafka.connect.converters.ByteArrayConverter
+	heartbeat.interval.ms = 3000
+	inter.worker.key.generation.algorithm = HmacSHA256
+	inter.worker.key.size = null
+	inter.worker.key.ttl.ms = 3600000
+	inter.worker.signature.algorithm = HmacSHA256
+	inter.worker.verification.algorithms = [HmacSHA256]
+	key.converter = class org.apache.kafka.connect.converters.ByteArrayConverter
+	listeners = [http://:8083]
+	metadata.max.age.ms = 300000
+	metadata.recovery.strategy = none
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	offset.flush.interval.ms = 60000
+	offset.flush.timeout.ms = 5000
+	offset.storage.partitions = 25
+	offset.storage.replication.factor = -1
+	offset.storage.topic = mirrormaker2-cluster-offsets
+	plugin.discovery = hybrid_warn
+	plugin.path = [/opt/kafka/plugins]
+	rebalance.timeout.ms = 60000
+	receive.buffer.bytes = 32768
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 40000
+	response.http.headers.config = 
+	rest.advertised.host.name = pre-prod-dc-kafka-mirror-maker-mirrormaker2-0.pre-prod-dc-kafka-mirror-maker-mirrormaker2.pre-prod-dc-kafka.svc
+	rest.advertised.listener = null
+	rest.advertised.port = 8083
+	rest.extension.classes = []
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.header.urlencode = false
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	scheduled.rebalance.max.delay.ms = 300000
+	security.protocol = SSL
+	send.buffer.bytes = 131072
+	session.timeout.ms = 10000
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.client.auth = none
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = /tmp/kafka/cluster.truststore.p12
+	ssl.truststore.password = [hidden]
+	ssl.truststore.type = PKCS12
+	status.storage.partitions = 5
+	status.storage.replication.factor = -1
+	status.storage.topic = mirrormaker2-cluster-status
+	task.shutdown.graceful.timeout.ms = 5000
+	topic.creation.enable = true
+	topic.tracking.allow.reset = true
+	topic.tracking.enable = true
+	value.converter = class org.apache.kafka.connect.converters.ByteArrayConverter
+	worker.sync.timeout.ms = 3000
+	worker.unsync.backoff.ms = 300000
+ (org.apache.kafka.connect.runtime.distributed.DistributedConfig) [main]
+2026-01-03 11:06:07,752 INFO Creating Kafka admin client (org.apache.kafka.connect.runtime.WorkerConfig) [main]
+2026-01-03 11:06:07,755 INFO AdminClientConfig values: 
+	auto.include.jmx.reporter = true
+	bootstrap.controllers = []
+	bootstrap.servers = [pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local:9092]
+	client.dns.lookup = use_all_dns_ips
+	client.id = 
+	connections.max.idle.ms = 300000
+	default.api.timeout.ms = 60000
+	enable.metrics.push = true
+	metadata.max.age.ms = 300000
+	metadata.recovery.strategy = none
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.header.urlencode = false
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = SSL
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = /tmp/kafka/cluster.truststore.p12
+	ssl.truststore.password = [hidden]
+	ssl.truststore.type = PKCS12
+ (org.apache.kafka.clients.admin.AdminClientConfig) [main]
+2026-01-03 11:06:08,067 INFO These configurations '[producer.ssl.truststore.password, group.id, rest.advertised.port, plugin.path, admin.security.protocol, consumer.ssl.truststore.location, producer.ssl.truststore.location, status.storage.replication.factor, config.providers.file.class, offset.storage.topic, consumer.security.protocol, value.converter, key.converter, admin.ssl.truststore.password, consumer.ssl.truststore.password, consumer.client.rack, config.storage.topic, producer.security.protocol, rest.advertised.host.name, status.storage.topic, header.converter, config.storage.replication.factor, offset.storage.replication.factor, admin.ssl.truststore.location]' were supplied but are not used yet. (org.apache.kafka.clients.admin.AdminClientConfig) [main]
+2026-01-03 11:06:08,068 INFO Kafka version: 3.9.0.redhat-00003 (org.apache.kafka.common.utils.AppInfoParser) [main]
+2026-01-03 11:06:08,068 INFO Kafka commitId: 3d47c3b0f1b07f0a (org.apache.kafka.common.utils.AppInfoParser) [main]
+2026-01-03 11:06:08,068 INFO Kafka startTimeMs: 1767438368067 (org.apache.kafka.common.utils.AppInfoParser) [main]
+2026-01-03 11:06:08,542 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:08,545 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:08,659 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:08,659 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:08,770 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:08,770 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:09,081 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:09,081 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:09,493 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:09,493 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:10,506 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:10,506 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:11,519 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:11,519 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:12,532 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:12,532 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:13,547 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:13,547 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:14,560 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:14,560 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:15,473 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:15,473 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:16,384 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:16,384 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:17,397 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:17,397 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:18,409 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:18,410 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:19,422 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:19,422 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:20,434 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:20,435 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:21,447 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:21,447 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:22,460 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:22,460 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:23,471 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:23,471 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:24,482 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:24,482 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:25,393 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:25,393 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:26,404 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:26,404 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:27,415 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:27,416 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:28,326 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:28,326 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:29,337 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:29,337 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:30,348 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:30,349 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:31,259 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:31,259 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:32,270 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:32,271 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:33,282 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:33,282 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:34,192 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:34,192 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:35,203 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:35,204 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:36,215 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:36,215 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:37,226 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:37,226 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:38,072 INFO [AdminClient clientId=adminclient-1] Metadata update failed (org.apache.kafka.clients.admin.internals.AdminMetadataManager) [kafka-admin-client-thread | adminclient-1]
+org.apache.kafka.common.errors.TimeoutException: Timed out waiting for a node assignment. Call: fetchMetadata
+2026-01-03 11:06:38,287 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:38,288 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:39,199 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:39,199 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:40,112 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:40,112 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:41,024 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:41,024 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:42,035 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:42,035 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:42,945 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:42,945 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:43,956 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:43,956 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:44,966 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:44,967 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:45,978 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:45,978 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:46,989 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:46,989 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:47,898 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:47,899 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:48,810 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:48,811 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:49,821 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:49,822 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:50,833 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:50,834 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:51,845 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:51,846 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:52,855 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:52,856 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:53,867 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:53,867 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:54,778 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:54,778 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:55,789 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:55,789 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:56,800 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:56,800 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:57,810 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:57,810 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:58,819 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:58,820 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:59,829 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:06:59,830 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:07:00,839 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:07:00,840 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:07:01,749 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:07:01,750 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:07:02,759 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:07:02,759 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:07:03,769 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:07:03,769 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:07:04,781 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:07:04,781 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:07:05,692 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:07:05,692 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:07:06,702 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:07:06,702 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:07:07,713 INFO [AdminClient clientId=adminclient-1] Node -1 disconnected. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:07:07,713 WARN [AdminClient clientId=adminclient-1] Connection to node -1 (pre-prod-dc-kafka-cluster-kafka-bootstrap.pre-prod-dc-kafka.svc.cluster.local/172.30.69.31:9092) terminated during authentication. This may happen due to any of the following reasons: (1) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (2) Transient network issue. (org.apache.kafka.clients.NetworkClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:07:08,073 INFO [AdminClient clientId=adminclient-1] Metadata update failed (org.apache.kafka.clients.admin.internals.AdminMetadataManager) [kafka-admin-client-thread | adminclient-1]
+org.apache.kafka.common.errors.TimeoutException: Timed out waiting for a node assignment. Call: fetchMetadata
+2026-01-03 11:07:08,074 INFO App info kafka.admin.client for adminclient-1 unregistered (org.apache.kafka.common.utils.AppInfoParser) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:07:08,075 INFO [AdminClient clientId=adminclient-1] Metadata update failed (org.apache.kafka.clients.admin.internals.AdminMetadataManager) [kafka-admin-client-thread | adminclient-1]
+org.apache.kafka.common.errors.TimeoutException: The AdminClient thread has exited. Call: fetchMetadata
+2026-01-03 11:07:08,075 INFO [AdminClient clientId=adminclient-1] Timed out 1 remaining operation(s) during close. (org.apache.kafka.clients.admin.KafkaAdminClient) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:07:08,080 INFO Metrics scheduler closed (org.apache.kafka.common.metrics.Metrics) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:07:08,080 INFO Closing reporter org.apache.kafka.common.metrics.JmxReporter (org.apache.kafka.common.metrics.Metrics) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:07:08,080 INFO Metrics reporters closed (org.apache.kafka.common.metrics.Metrics) [kafka-admin-client-thread | adminclient-1]
+2026-01-03 11:07:08,080 ERROR Stopping due to error (org.apache.kafka.connect.cli.AbstractConnectCli) [main]
+org.apache.kafka.connect.errors.ConnectException: Failed to connect to and describe Kafka cluster. Check worker's broker connection and security properties.
+	at org.apache.kafka.connect.runtime.WorkerConfig.lookupKafkaClusterId(WorkerConfig.java:303)
+	at org.apache.kafka.connect.runtime.WorkerConfig.lookupKafkaClusterId(WorkerConfig.java:283)
+	at org.apache.kafka.connect.runtime.WorkerConfig.kafkaClusterId(WorkerConfig.java:413)
+	at org.apache.kafka.connect.cli.AbstractConnectCli.startConnect(AbstractConnectCli.java:124)
+	at org.apache.kafka.connect.cli.AbstractConnectCli.run(AbstractConnectCli.java:95)
+	at org.apache.kafka.connect.cli.ConnectDistributed.main(ConnectDistributed.java:112)
+Caused by: java.util.concurrent.ExecutionException: org.apache.kafka.common.errors.TimeoutException: Timed out waiting for a node assignment. Call: listNodes
+	at java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:396)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2073)
+	at org.apache.kafka.common.internals.KafkaFutureImpl.get(KafkaFutureImpl.java:165)
+	at org.apache.kafka.connect.runtime.WorkerConfig.lookupKafkaClusterId(WorkerConfig.java:297)
+	... 5 more
+Caused by: org.apache.kafka.common.errors.TimeoutException: Timed out waiting for a node assignment. Call: listNodes
