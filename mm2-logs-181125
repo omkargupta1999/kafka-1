@@ -1,7 +1,8 @@
- mirrorMaker2:
+mirrorMaker2:
     enabled: true
     name: "pre-prod-dc-kafka-mirror-maker"
     # Active/Passive setup for DR
+    connectCluster: "source"
     clusters:
       - alias: "source"
         bootstrapServers: "pre-prod-kafka-cluster-kafka-bootstrap-pre-prod-kafka.apps.preprod.epay.sbi:443"
@@ -14,10 +15,9 @@ mirrorMaker2:
     enabled: false
     name: "pre-prod-kafka-mirror-maker"
     # Active/Passive setup for DR
+    connectCluster: "source"
     clusters:
       - alias: "source"
         bootstrapServers: "pre-prod-dc-kafka-cluster-kafka-bootstrap-pre-prod-dc-kafka.apps.dcpreprod.epay.sbi:443"
-      
       - alias: "target"
         bootstrapServers: "pre-prod-kafka-cluster-kafka-bootstrap.pre-prod-kafka.svc.cluster.local:9092"
- 
